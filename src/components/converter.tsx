@@ -198,7 +198,7 @@ export function Converter() {
                   Drag & drop an image here or
                 </p>
                 <p className="text-muted-foreground text-sm">
-                  Supports PNG, JPG, SVG (Max 5MB)
+                  Supports PNG, JPEG/JPG, WEBP, GIF, SVG (Max 5MB)
                 </p>
               </div>
             )}
@@ -206,14 +206,14 @@ export function Converter() {
               type="file"
               accept="image/*"
               onChange={handleChange}
-              className="mt-2 hidden"
+              className="hidden"
               id="file-upload"
             />
             <label
               htmlFor="file-upload"
               className={buttonVariants({
                 variant: "outline",
-                className: "mt-4 cursor-pointer",
+                className: cn(file ? "mt-4" : "mt-0", "cursor-pointer"),
               })}
             >
               Select File
@@ -223,7 +223,12 @@ export function Converter() {
             <Checkbox
               id="want-to-add-site-name"
               checked={wantToAddSiteName}
-              onCheckedChange={(set) => setWantToAddSiteName(set as boolean)}
+              onCheckedChange={(value) => {
+                setWantToAddSiteName(value as boolean)
+                if (!value) {
+                  setSiteConfig({ name: "", shortName: "" })
+                }
+              }}
             />
             <div className="grid gap-1.5 leading-none">
               <Label htmlFor="want-to-add-site-name" className="cursor-pointer">
