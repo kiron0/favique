@@ -4,14 +4,13 @@ import * as React from "react"
 import ImageView from "next/image"
 import Link from "next/link"
 import {
-  generateIco,
   generateManifest,
   loadImage,
   MAX_FILE_SIZE,
-  resizeImage,
   sizes,
   SUPPORTED_TYPES,
 } from "@/utils"
+import { Favium } from "favium"
 import { saveAs } from "file-saver"
 import JSZip from "jszip"
 import { Loader2, MoveLeft, X } from "lucide-react"
@@ -95,26 +94,43 @@ export function Converter() {
 
     try {
       const zip = new JSZip()
+
       const img = await loadImage(file)
 
-      const pngBlobs: { [key: number]: Blob } = {}
+      const canvas = document.createElement("canvas")
+      canvas.width = img.width
+      canvas.height = img.height
+      const ctx = canvas.getContext("2d")
+      if (!ctx) throw new Error("Failed to get canvas context")
+      ctx.drawImage(img, 0, 0)
 
-      for (const { name, size } of sizes) {
-        const blob = await resizeImage(img, size)
-        zip.file(name, blob)
-        if (size === 16 || size === 32) {
-          pngBlobs[size] = blob
+      const favicon = new Favium(canvas)
+      const bundle = favicon.bundle()
+
+      sizes.forEach(({ name, size }) => {
+        const dataUrl = bundle[`png${size}` as keyof typeof bundle]
+        if (!dataUrl) return
+        const base64Data = dataUrl.split(",")[1]
+        const byteString = atob(base64Data)
+        const byteArray = new Uint8Array(byteString.length)
+        for (let i = 0; i < byteString.length; i++) {
+          byteArray[i] = byteString.charCodeAt(i)
         }
-      }
+        zip.file(name, byteArray)
+      })
 
-      const icoBlob = await generateIco([pngBlobs[16], pngBlobs[32]])
-      zip.file("favicon.ico", icoBlob)
+      const icoBase64 = bundle.ico.split(",")[1]
+      const icoBytes = atob(icoBase64)
+      const icoArray = new Uint8Array(icoBytes.length)
+      for (let i = 0; i < icoBytes.length; i++) {
+        icoArray[i] = icoBytes.charCodeAt(i)
+      }
+      zip.file("favicon.ico", icoArray)
 
       const manifest = generateManifest({
         name: siteConfig.name,
         short_name: siteConfig.shortName,
       })
-
       zip.file("site.webmanifest", JSON.stringify(manifest, null, 2))
 
       const zipBlob = await zip.generateAsync({ type: "blob" })
@@ -256,7 +272,7 @@ export function Converter() {
               <div className="space-y-2">
                 <Label htmlFor="site-short-name">Site Short Name</Label>
                 <Input
-                  type="url"
+                  type="text"
                   placeholder="Enter your site short name"
                   value={siteConfig.shortName}
                   onChange={(e) =>
