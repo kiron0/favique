@@ -82,6 +82,15 @@ export function Converter() {
         description: "Please select an image to convert.",
       })
     }
+
+    if (wantToAddSiteName && (!siteConfig.name || !siteConfig.shortName)) {
+      return notifyError({
+        title: "Missing site name",
+        description:
+          "Please enter a site name and short name or uncheck the option.",
+      })
+    }
+
     setLoading(true)
 
     try {
