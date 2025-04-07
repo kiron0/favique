@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import "@/styles/globals.css"
 
 const jetbrainsMono = JetBrains_Mono({
+  weight: ["400", "500", "600", "700", "800"],
   subsets: ["latin"],
 })
 

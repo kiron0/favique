@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import ImageView from "next/image"
-import Link from "next/link"
 import {
   generateManifest,
   loadImage,
@@ -13,21 +12,17 @@ import {
 import { FaviconComposer } from "favium"
 import { saveAs } from "file-saver"
 import JSZip from "jszip"
-import { Loader2, MoveLeft, X } from "lucide-react"
+import { Loader2, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { notifyError } from "@/components/toast"
+
+import { Hero } from "./hero"
 
 export function Converter() {
   const [file, setFile] = React.useState<File | null>(null)
@@ -158,152 +153,155 @@ export function Converter() {
   }
 
   return (
-    <div className="mx-3 mt-8 max-w-2xl flex-col items-center justify-center space-y-8 md:mx-auto md:mt-0 md:flex md:min-h-svh">
-      <div className="flex items-center justify-center">
-        <Link
-          href="/"
-          className={buttonVariants({
-            variant: "outline",
-          })}
-        >
-          <MoveLeft className="size-4" />
-          Back to Home
-        </Link>
-      </div>
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Favicon Converter</CardTitle>
-          <CardDescription>
-            Convert your image to a favicon pack for your website.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div
-            onDragEnter={handleDrag}
-            onDragLeave={handleDrag}
-            onDragOver={handleDrag}
-            onDrop={handleDrop}
-            className={cn(
-              "hover:bg-secondary hover:border-primary cursor-pointer rounded-lg border-2 border-dashed text-center transition-colors",
-              dragActive ? "bg-secondary border-primary" : "bg-background"
-            )}
-          >
-            {preview ? (
-              <div className="relative flex min-h-60 flex-col items-center justify-center gap-4 py-6">
-                <ImageView
-                  src={preview}
-                  width={180}
-                  height={180}
-                  alt="Preview"
-                  draggable={false}
-                  onContextMenu={(e) => e.preventDefault()}
-                  className="mx-auto max-h-64 rounded-md border object-contain select-none"
+    <div className="space-y-8">
+      <Hero
+        title="Favicon Converter / Generate from Image"
+        description="Quickly generate your favicon from an image by uploading your image below. Download your favicon in the most up to date formats."
+      />
+      <div className="mx-auto w-full max-w-7xl">
+        <div className="mx-3 max-w-2xl flex-col space-y-8">
+          <Card className="w-full rounded-md border-none">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold md:text-2xl">
+                Converter
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+                className={cn(
+                  "hover:bg-secondary hover:border-primary cursor-pointer rounded-lg border-2 border-dashed text-center transition-colors",
+                  dragActive ? "bg-secondary border-primary" : "bg-background"
+                )}
+              >
+                {preview ? (
+                  <div className="relative flex min-h-60 flex-col items-center justify-center gap-4 py-6">
+                    <ImageView
+                      src={preview}
+                      width={180}
+                      height={180}
+                      alt="Preview"
+                      draggable={false}
+                      onContextMenu={(e) => e.preventDefault()}
+                      className="mx-auto max-h-64 rounded-md border object-contain select-none"
+                    />
+                    <p className="text-muted-foreground text-sm text-balance">
+                      {file?.name} ({Math.round((file?.size || 0) / 1024)} KB)
+                    </p>
+                    <Button
+                      variant="destructive"
+                      onClick={() => {
+                        setFile(null)
+                        setPreview(null)
+                        setDragActive(false)
+                        setWantToAddSiteName(false)
+                        setSiteConfig({
+                          name: "",
+                          shortName: "",
+                        })
+                      }}
+                      className="absolute top-2 right-2 h-8 w-8 rounded-full p-0"
+                    >
+                      <X className="size-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <label htmlFor="file-upload" className="cursor-pointer">
+                    <div className="flex min-h-60 flex-col items-center justify-center space-y-2">
+                      <p className="text-muted-foreground">
+                        Drag & drop an image here or
+                      </p>
+                      <p className="text-muted-foreground text-sm">
+                        Supports PNG, JPEG/JPG, WEBP, GIF, SVG (Max 5MB)
+                      </p>
+                    </div>
+                  </label>
+                )}
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleChange}
+                  className="hidden"
+                  id="file-upload"
                 />
-                <p className="text-muted-foreground text-sm text-balance">
-                  {file?.name} ({Math.round((file?.size || 0) / 1024)} KB)
-                </p>
-                <Button
-                  variant="destructive"
-                  onClick={() => {
-                    setFile(null)
-                    setPreview(null)
-                    setDragActive(false)
-                    setWantToAddSiteName(false)
-                    setSiteConfig({
-                      name: "",
-                      shortName: "",
-                    })
-                  }}
-                  className="absolute top-2 right-2 h-8 w-8 rounded-full p-0"
-                >
-                  <X className="size-4" />
-                </Button>
               </div>
-            ) : (
-              <label htmlFor="file-upload">
-                <div className="flex min-h-60 flex-col items-center justify-center space-y-2">
-                  <p className="text-muted-foreground">
-                    Drag & drop an image here or
-                  </p>
-                  <p className="text-muted-foreground text-sm">
-                    Supports PNG, JPEG/JPG, WEBP, GIF, SVG (Max 5MB)
+              <div className="items-top flex space-x-2">
+                <Checkbox
+                  id="want-to-add-site-name"
+                  checked={wantToAddSiteName}
+                  onCheckedChange={(value) => {
+                    setWantToAddSiteName(value as boolean)
+                    if (!value) {
+                      setSiteConfig({ name: "", shortName: "" })
+                    }
+                  }}
+                />
+                <div className="grid gap-1.5 leading-none">
+                  <Label
+                    htmlFor="want-to-add-site-name"
+                    className="cursor-pointer"
+                  >
+                    Add site name and short name to manifest
+                  </Label>
+                  <p className="text-muted-foreground text-xs">
+                    This will add the site name and short name to the web
+                    manifest file. If you don't want to add it, leave it
+                    unchecked.
                   </p>
                 </div>
-              </label>
-            )}
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={handleChange}
-              className="hidden"
-              id="file-upload"
-            />
-          </div>
-          <div className="items-top flex space-x-2">
-            <Checkbox
-              id="want-to-add-site-name"
-              checked={wantToAddSiteName}
-              onCheckedChange={(value) => {
-                setWantToAddSiteName(value as boolean)
-                if (!value) {
-                  setSiteConfig({ name: "", shortName: "" })
-                }
-              }}
-            />
-            <div className="grid gap-1.5 leading-none">
-              <Label htmlFor="want-to-add-site-name" className="cursor-pointer">
-                Add site name and short name to manifest
-              </Label>
-              <p className="text-muted-foreground text-xs">
-                This will add the site name and short name to the web manifest
-                file. If you don't want to add it, leave it unchecked.
-              </p>
-            </div>
-          </div>
-          {wantToAddSiteName && (
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="site-name">Site Name</Label>
-                <Input
-                  type="text"
-                  placeholder="Enter your site name"
-                  value={siteConfig.name}
-                  onChange={(e) =>
-                    setSiteConfig({ ...siteConfig, name: e.target.value })
-                  }
-                />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="site-short-name">Site Short Name</Label>
-                <Input
-                  type="text"
-                  placeholder="Enter your site short name"
-                  value={siteConfig.shortName}
-                  onChange={(e) =>
-                    setSiteConfig({ ...siteConfig, shortName: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-          )}
-          {file && (
-            <Button
-              onClick={handleGenerate}
-              disabled={loading}
-              className="w-full"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                "Download Favicon Pack"
+              {wantToAddSiteName && (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="site-name">Site Name</Label>
+                    <Input
+                      type="text"
+                      placeholder="Enter your site name"
+                      value={siteConfig.name}
+                      onChange={(e) =>
+                        setSiteConfig({ ...siteConfig, name: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="site-short-name">Site Short Name</Label>
+                    <Input
+                      type="text"
+                      placeholder="Enter your site short name"
+                      value={siteConfig.shortName}
+                      onChange={(e) =>
+                        setSiteConfig({
+                          ...siteConfig,
+                          shortName: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
               )}
-            </Button>
-          )}
-        </CardContent>
-      </Card>
+              {file && (
+                <Button
+                  onClick={handleGenerate}
+                  disabled={loading}
+                  className="w-full"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    "Download Favicon Pack"
+                  )}
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   )
 }

@@ -73,16 +73,49 @@ export function Footer() {
           </form>
         </div>
       </div>
+      <div className="mx-auto w-full max-w-7xl space-y-2 px-4 text-center lg:px-0">
+        <h2 className="text-lg font-semibold">Built with</h2>
+        <div className="text-muted-foreground text-sm">
+          {logo.title} is built with{" "}
+          <a
+            href="https://nextjs.org/"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="text-primary underline hover:no-underline"
+          >
+            Next.js
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://ui.shadcn.com/"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="text-primary underline hover:no-underline"
+          >
+            shadcn/ui
+          </a>{" "}
+          using{" "}
+          <a
+            href="https://www.radix-ui.com/"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="text-primary underline hover:no-underline"
+          >
+            Radix UI
+          </a>{" "}
+          components.
+        </div>
+      </div>
       <div className="text-muted-foreground mx-auto flex w-full max-w-7xl flex-col-reverse justify-between gap-4 px-4 text-center text-sm font-medium md:flex-col lg:flex-row lg:items-center lg:text-left xl:px-0">
         <p>
           &copy; {new Date().getFullYear()} {logo.title}. All rights reserved.
         </p>
         <ul className="flex justify-center gap-4 lg:justify-start">
-          <li className="hover:text-primary hover:underline">
+          <li className="text-primary underline hover:no-underline">
             <a href="#"> Terms and Conditions</a>
           </li>
           <span className="text-muted-foreground">|</span>
-          <li className="hover:text-primary hover:underline">
+          <li className="text-primary underline hover:no-underline">
             <a href="#"> Privacy Policy</a>
           </li>
         </ul>
