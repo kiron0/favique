@@ -44,17 +44,28 @@ export function Converter() {
   })
 
   const handleFile = (file: File) => {
-    if (
-      !file ||
-      !SUPPORTED_TYPES.includes(file.type) ||
-      file.size > MAX_FILE_SIZE
-    ) {
+    if (!file) {
       setDragActive(false)
       return notifyError({
         title: "Invalid file",
         description: "Please select a valid image (PNG/JPG/SVG, max 5MB)",
       })
     }
+    if (file.size > MAX_FILE_SIZE) {
+      setDragActive(false)
+      return notifyError({
+        title: "File too large",
+        description: `Please select a file smaller than ${MAX_FILE_SIZE} MB.`,
+      })
+    }
+    if (!SUPPORTED_TYPES.includes(file.type)) {
+      setDragActive(false)
+      return notifyError({
+        title: "Unsupported file type",
+        description: "Please select a PNG, JPG, or SVG file.",
+      })
+    }
+
     setFile(file)
     setPreview(URL.createObjectURL(file))
     setDragActive(false)
@@ -178,7 +189,7 @@ export function Converter() {
             )}
           >
             {preview ? (
-              <div className="relative flex h-60 flex-col items-center justify-center gap-4">
+              <div className="relative flex min-h-60 flex-col items-center justify-center gap-4 py-6">
                 <ImageView
                   src={preview}
                   width={180}
@@ -186,9 +197,9 @@ export function Converter() {
                   alt="Preview"
                   draggable={false}
                   onContextMenu={(e) => e.preventDefault()}
-                  className="mx-auto max-h-64 object-contain select-none"
+                  className="mx-auto max-h-64 rounded-md border object-contain select-none"
                 />
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-sm text-balance">
                   {file?.name} ({Math.round((file?.size || 0) / 1024)} KB)
                 </p>
                 <Button
@@ -210,7 +221,7 @@ export function Converter() {
               </div>
             ) : (
               <label htmlFor="file-upload">
-                <div className="flex h-60 flex-col items-center justify-center space-y-2">
+                <div className="flex min-h-60 flex-col items-center justify-center space-y-2">
                   <p className="text-muted-foreground">
                     Drag & drop an image here or
                   </p>
