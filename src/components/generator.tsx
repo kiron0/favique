@@ -1,34 +1,27 @@
 "use client"
 
-import Link from "next/link"
-import { MoveLeft } from "lucide-react"
-
-import { buttonVariants } from "@/components/ui/button"
-
-import { Hero } from "./hero"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Hero } from "@/components/hero"
 
 export function Generator() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 md:space-y-8">
       <Hero
         title="Favicon Generator / Generate from Text"
         description="Quickly generate your favicon from text by selecting the text, fonts, and colors. Download your favicon in the most up to date formats."
       />
-      <div className="flex h-full min-h-svh w-full flex-col items-center justify-center space-y-2 text-center">
-        <h2 className="text-2xl font-bold">Coming Soon</h2>
-        <p className="text-muted-foreground text-balance">
-          This feature is currently under development. Stay tuned for updates!
-        </p>
-        <div className="flex items-center justify-center pt-5">
-          <Link
-            href="/"
-            className={buttonVariants({
-              variant: "outline",
-            })}
-          >
-            <MoveLeft className="size-4" />
-            Back to Home
-          </Link>
+      <div className="mx-auto w-full max-w-7xl">
+        <div className="mx-3 flex-col space-y-8 xl:mx-0">
+          <Card className="w-full rounded-md border-none">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold md:text-2xl">
+                Generate From Text
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <h2>Hi</h2>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
