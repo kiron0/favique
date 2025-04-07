@@ -1,6 +1,7 @@
 import NextTopLoader from "nextjs-toploader"
 
 import { Toaster } from "@/components/ui/toaster"
+import { Navbar } from "@/components/navbar"
 
 export function Providers({
   children,
@@ -9,6 +10,7 @@ export function Providers({
 }>) {
   return (
     <>
+      <Navbar />
       <main>{children}</main>
       <Toaster />
       <NextTopLoader showForHashAnchor={false} />

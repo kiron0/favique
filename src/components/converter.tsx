@@ -184,7 +184,7 @@ export function Converter() {
             onDragOver={handleDrag}
             onDrop={handleDrop}
             className={cn(
-              "rounded-lg border-2 border-dashed text-center transition-colors",
+              "hover:bg-secondary hover:border-primary cursor-pointer rounded-lg border-2 border-dashed text-center transition-colors",
               dragActive ? "bg-secondary border-primary" : "bg-background"
             )}
           >
