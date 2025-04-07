@@ -1,6 +1,7 @@
 import NextTopLoader from "nextjs-toploader"
 
 import { Toaster } from "@/components/ui/toaster"
+import { Footer } from "@/components/footer"
 import { Navbar } from "@/components/navbar"
 
 export function Providers({
@@ -11,7 +12,8 @@ export function Providers({
   return (
     <>
       <Navbar />
-      <main>{children}</main>
+      <main className="flex min-h-svh w-full flex-col">{children}</main>
+      <Footer />
       <Toaster />
       <NextTopLoader showForHashAnchor={false} />
     </>

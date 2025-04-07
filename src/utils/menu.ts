@@ -9,6 +9,7 @@ interface MenuItems {
     src: string
     alt: string
     title: string
+    description: string
   }
   menu: MenuItem[]
   extra: {
@@ -23,6 +24,8 @@ export const menuItems: MenuItems = {
     src: "https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg",
     alt: "logo",
     title: "Favique",
+    description:
+      "A collection of 100+ responsive HTML templates for your startup business or side project.",
   },
   menu: [
     {
