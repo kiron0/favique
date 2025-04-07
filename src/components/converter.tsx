@@ -173,12 +173,12 @@ export function Converter() {
             onDragOver={handleDrag}
             onDrop={handleDrop}
             className={cn(
-              "rounded-lg border-2 border-dashed p-4 text-center transition-colors",
-              dragActive ? "bg-secondary border-blue-500" : "bg-background"
+              "rounded-lg border-2 border-dashed text-center transition-colors",
+              dragActive ? "bg-secondary border-primary" : "bg-background"
             )}
           >
             {preview ? (
-              <div className="relative flex flex-col items-center gap-4">
+              <div className="relative flex h-60 flex-col items-center justify-center gap-4">
                 <ImageView
                   src={preview}
                   width={180}
@@ -203,20 +203,22 @@ export function Converter() {
                       shortName: "",
                     })
                   }}
-                  className="absolute top-0 right-0 h-8 w-8 rounded-full p-0"
+                  className="absolute top-2 right-2 h-8 w-8 rounded-full p-0"
                 >
                   <X className="size-4" />
                 </Button>
               </div>
             ) : (
-              <div className="space-y-2 py-8">
-                <p className="text-muted-foreground">
-                  Drag & drop an image here or
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  Supports PNG, JPEG/JPG, WEBP, GIF, SVG (Max 5MB)
-                </p>
-              </div>
+              <label htmlFor="file-upload">
+                <div className="flex h-60 flex-col items-center justify-center space-y-2">
+                  <p className="text-muted-foreground">
+                    Drag & drop an image here or
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    Supports PNG, JPEG/JPG, WEBP, GIF, SVG (Max 5MB)
+                  </p>
+                </div>
+              </label>
             )}
             <Input
               type="file"
@@ -225,15 +227,6 @@ export function Converter() {
               className="hidden"
               id="file-upload"
             />
-            <label
-              htmlFor="file-upload"
-              className={buttonVariants({
-                variant: "outline",
-                className: cn(file ? "mt-4" : "mt-0", "cursor-pointer"),
-              })}
-            >
-              Select File
-            </label>
           </div>
           <div className="items-top flex space-x-2">
             <Checkbox
