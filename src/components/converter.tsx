@@ -10,7 +10,7 @@ import {
   sizes,
   SUPPORTED_TYPES,
 } from "@/utils"
-import { Favium } from "favium"
+import { FaviconComposer } from "favium"
 import { saveAs } from "file-saver"
 import JSZip from "jszip"
 import { Loader2, MoveLeft, X } from "lucide-react"
@@ -104,7 +104,7 @@ export function Converter() {
       if (!ctx) throw new Error("Failed to get canvas context")
       ctx.drawImage(img, 0, 0)
 
-      const favicon = new Favium(canvas)
+      const favicon = new FaviconComposer(canvas)
       const bundle = favicon.bundle()
 
       sizes.forEach(({ name, size }) => {
