@@ -1,13 +1,13 @@
 import type { Metadata } from "next"
-import { Source_Code_Pro } from "next/font/google"
+import { Concert_One } from "next/font/google"
 import { Providers } from "@/providers"
 
 import { cn } from "@/lib/utils"
 
 import "@/styles/globals.css"
 
-const sourceCodePro = Source_Code_Pro({
-  weight: ["400", "500", "600", "700", "800", "900"],
+const concertOne = Concert_One({
+  weight: ["400"],
   subsets: ["latin"],
 })
 
@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("antialiased", sourceCodePro.className)}>
+      <body className={cn("antialiased", concertOne.className)}>
         <Providers>{children}</Providers>
       </body>
     </html>

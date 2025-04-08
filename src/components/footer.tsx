@@ -78,32 +78,13 @@ export function Footer() {
         <div className="text-muted-foreground text-sm">
           {logo.title} is built with{" "}
           <a
-            href="https://nextjs.org/"
+            href="https://www.npmjs.com/package/favium"
             target="_blank"
             rel="noreferrer noopener"
             className="text-primary underline hover:no-underline"
           >
-            Next.js
-          </a>{" "}
-          and{" "}
-          <a
-            href="https://ui.shadcn.com/"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="text-primary underline hover:no-underline"
-          >
-            shadcn/ui
-          </a>{" "}
-          using{" "}
-          <a
-            href="https://www.radix-ui.com/"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="text-primary underline hover:no-underline"
-          >
-            Radix UI
-          </a>{" "}
-          components.
+            favium
+          </a>
         </div>
       </div>
       <div className="text-muted-foreground mx-auto flex w-full max-w-7xl flex-col-reverse justify-between gap-4 px-4 text-center text-sm font-medium md:flex-col lg:flex-row lg:items-center lg:text-left xl:px-0">

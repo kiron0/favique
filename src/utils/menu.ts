@@ -23,7 +23,7 @@ export const menuItems: MenuItems = {
     url: "/",
     src: "https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg",
     alt: "logo",
-    title: "Favique",
+    title: "favique",
     description:
       "A collection of 100+ responsive HTML templates for your startup business or side project.",
   },
