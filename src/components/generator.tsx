@@ -23,10 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
+import { ColorPicker } from "@/components/color-picker"
 import { FontsSelection } from "@/components/fonts-selection"
 import { Hero } from "@/components/hero"
-
-import { ColorPicker } from "./color-picker"
 
 export function Generator() {
   const { img, loading, form, fontVariants, generateFaviconPack } =
@@ -43,7 +42,13 @@ export function Generator() {
           <div className="mx-3 mt-8 flex w-full flex-col space-y-4 xl:mx-0">
             <h2 className="text-xl font-bold md:text-2xl">Preview</h2>
             <div className="flex w-full items-center justify-center">
-              <img src={img} alt="Generated Favicon" className="h-auto w-52" />
+              <img
+                src={img}
+                alt="Generated Favicon"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
+                className="h-auto w-52 select-none"
+              />
             </div>
           </div>
         )}
@@ -94,7 +99,7 @@ export function Generator() {
                         <FormItem>
                           <FormLabel>Background Color</FormLabel>
                           <FormControl>
-                            <ColorPicker disabled {...field} />
+                            <ColorPicker {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

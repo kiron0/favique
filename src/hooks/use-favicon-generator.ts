@@ -1,7 +1,13 @@
+"use client"
+
 import * as React from "react"
 import { generateManifest, sizes } from "@/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { FaviconComposer } from "favium"
+import {
+  FaviconComposer,
+  TextIconGenerator,
+  TextIconGeneratorOptions,
+} from "favium"
 import { saveAs } from "file-saver"
 import JSZip from "jszip"
 import { useForm, UseFormReturn } from "react-hook-form"
@@ -11,7 +17,6 @@ import { textIconFormSchema, TextIconFormSchema } from "@/lib/schema"
 import { notifyError } from "@/components/toast"
 
 import Fonts from "../../public/fonts.json"
-import { TextIconGenerator } from "./index.mjs"
 
 const DEFAULT_VALUES: TextIconFormSchema = {
   text: "F",
@@ -21,7 +26,7 @@ const DEFAULT_VALUES: TextIconFormSchema = {
   backgroundColor: "#000000",
   fontSize: 110,
   fontWeight: "Regular 400 Normal",
-  roundness: "square",
+  roundness: "rounded",
 }
 
 export function useFaviconGenerator() {
@@ -78,6 +83,8 @@ export function useFaviconGenerator() {
   }
 
   const updateCanvas = React.useCallback(async () => {
+    if (typeof window === "undefined") return
+
     const data = form.getValues()
     const selectedFont = fontVariants.find((v) => v.name === data.fontWeight)
 
@@ -89,7 +96,6 @@ export function useFaviconGenerator() {
     const [, weight, style] = selectedFont.name.split(" ")
 
     await new Promise<void>((resolve) => {
-      if (typeof window === "undefined") return resolve()
       WebFont.load({
         google: { families: [data.fontFamily] },
         active: () => resolve(),
@@ -100,8 +106,7 @@ export function useFaviconGenerator() {
       })
     })
 
-    const generator = new TextIconGenerator(canvasRef.current)
-    generator.generate({
+    const payload: TextIconGeneratorOptions = {
       text: data.text,
       fontFamily: data.fontFamily,
       fontStyle: style.toLowerCase() as "normal" | "italic",
@@ -110,7 +115,10 @@ export function useFaviconGenerator() {
       fontSize: data.fontSize,
       fontWeight: weight,
       shape: data.roundness as "square" | "circle" | "rounded",
-    })
+    }
+
+    const generator = new TextIconGenerator(canvasRef.current)
+    generator.generate(payload)
 
     const composer = new FaviconComposer(canvasRef.current)
     const dataUrl = composer.png(512)
@@ -118,6 +126,7 @@ export function useFaviconGenerator() {
   }, [form, fontVariants])
 
   React.useEffect(() => {
+    updateCanvas()
     const subscription = form.watch(updateCanvas)
     return () => subscription.unsubscribe()
   }, [form, updateCanvas])

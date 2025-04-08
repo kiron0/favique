@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,css}\"",
-    "upgrade": "bunx --bun ncu -x 'tailwindcss' -u && bun install",
+    "upgrade": "bunx --bun ncu -u && bun install",
     "push": "git add . && git commit -m \"chore update\" && git push"
   },
   "dependencies": {
@@ -23,8 +23,8 @@
     "@radix-ui/react-toast": "^1.2.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "cmdk": "1.0.0",
-    "favium": "^0.0.3",
+    "cmdk": "1.1.1",
+    "favium": "^0.0.4",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "lucide-react": "^0.487.0",
