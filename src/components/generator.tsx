@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import { roundnessOptions } from "@/utils"
 import { Loader2 } from "lucide-react"
 
@@ -28,8 +29,10 @@ import { FontsSelection } from "@/components/fonts-selection"
 import { Hero } from "@/components/hero"
 
 export function Generator() {
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
+
   const { img, loading, form, fontVariants, generateFaviconPack } =
-    useFaviconGenerator()
+    useFaviconGenerator(canvasRef)
 
   return (
     <div className="space-y-4 md:space-y-8">
@@ -39,15 +42,29 @@ export function Generator() {
       />
       <div className="mx-auto w-full max-w-7xl">
         {img && (
-          <div className="mx-3 mt-8 flex w-full flex-col space-y-4 xl:mx-0">
+          <div className="mx-3 my-8 flex w-full flex-col space-y-4 xl:mx-0">
             <h2 className="text-xl font-bold md:text-2xl">Preview</h2>
-            <div className="flex w-full items-center justify-center">
+            <div className="flex w-full items-end justify-center gap-5">
               <img
                 src={img}
                 alt="Generated Favicon"
                 draggable={false}
                 onContextMenu={(e) => e.preventDefault()}
-                className="h-auto w-52 select-none"
+                className="h-auto w-28 select-none"
+              />
+              <img
+                src={img}
+                alt="Generated Favicon"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
+                className="h-auto w-16 select-none"
+              />
+              <img
+                src={img}
+                alt="Generated Favicon"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
+                className="h-auto w-8 select-none"
               />
             </div>
           </div>
@@ -62,7 +79,9 @@ export function Generator() {
             <CardContent className="space-y-4">
               <Form {...form}>
                 <form
-                  onSubmit={form.handleSubmit(generateFaviconPack)}
+                  onSubmit={form.handleSubmit(() =>
+                    generateFaviconPack(canvasRef.current)
+                  )}
                   className="space-y-8"
                 >
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -143,8 +162,9 @@ export function Generator() {
                           <FormLabel>Font Size: {field.value}px</FormLabel>
                           <FormControl>
                             <Slider
-                              max={1000}
-                              step={5}
+                              max={170}
+                              min={16}
+                              step={1}
                               value={[field.value]}
                               onValueChange={(value) => {
                                 field.onChange(value[0])

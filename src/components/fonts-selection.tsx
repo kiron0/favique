@@ -18,6 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 import Fonts from "../../public/fonts.json"
 
@@ -65,22 +66,24 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
           <CommandInput placeholder="Search font..." />
           <CommandList>
             <CommandEmpty>No font found.</CommandEmpty>
-            <CommandGroup>
-              {filteredFonts.map((framework) => (
-                <CommandItem
-                  key={framework.family}
-                  value={framework.family}
-                  onSelect={(currentValue) => {
-                    onValueChange(currentValue)
-                    setOpen(false)
-                  }}
-                >
-                  {framework.family}
-                  {value === framework.family && (
-                    <CheckIcon size={16} className="ml-auto" />
-                  )}
-                </CommandItem>
-              ))}
+            <CommandGroup className="px-0">
+              <ScrollArea className="h-[300px] w-full px-3">
+                {filteredFonts.map((framework) => (
+                  <CommandItem
+                    key={framework.family}
+                    value={framework.family}
+                    onSelect={(currentValue) => {
+                      onValueChange(currentValue)
+                      setOpen(false)
+                    }}
+                  >
+                    {framework.family}
+                    {value === framework.family && (
+                      <CheckIcon size={16} className="ml-auto" />
+                    )}
+                  </CommandItem>
+                ))}
+              </ScrollArea>
             </CommandGroup>
           </CommandList>
         </Command>

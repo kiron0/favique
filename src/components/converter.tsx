@@ -2,19 +2,11 @@
 
 import * as React from "react"
 import ImageView from "next/image"
-import {
-  generateManifest,
-  loadImage,
-  MAX_FILE_SIZE,
-  sizes,
-  SUPPORTED_TYPES,
-} from "@/utils"
-import { FaviconComposer } from "favium"
-import { saveAs } from "file-saver"
-import JSZip from "jszip"
+import { loadImage, MAX_FILE_SIZE, SUPPORTED_TYPES } from "@/utils"
 import { Loader2, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { useFaviconGenerator } from "@/hooks/use-favicon-generator"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -25,6 +17,8 @@ import { notifyError } from "@/components/toast"
 import { Hero } from "./hero"
 
 export function Converter() {
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
+  const { generateFaviconPack } = useFaviconGenerator(canvasRef)
   const [file, setFile] = React.useState<File | null>(null)
   const [preview, setPreview] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(false)
@@ -99,48 +93,18 @@ export function Converter() {
     setLoading(true)
 
     try {
-      const zip = new JSZip()
-
       const img = await loadImage(file)
 
-      const canvas = document.createElement("canvas")
+      const canvas = canvasRef.current
+      if (!canvas) throw new Error("Canvas not found")
+
       canvas.width = img.width
       canvas.height = img.height
-      const ctx = canvas.getContext("2d")
-      if (!ctx) throw new Error("Failed to get canvas context")
-      ctx.drawImage(img, 0, 0)
 
-      const favicon = new FaviconComposer(canvas)
-      const bundle = favicon.bundle()
-
-      sizes.forEach(({ name, size }) => {
-        const dataUrl = bundle[`png${size}` as keyof typeof bundle]
-        if (!dataUrl) return
-        const base64Data = dataUrl.split(",")[1]
-        const byteString = atob(base64Data)
-        const byteArray = new Uint8Array(byteString.length)
-        for (let i = 0; i < byteString.length; i++) {
-          byteArray[i] = byteString.charCodeAt(i)
-        }
-        zip.file(name, byteArray)
-      })
-
-      const icoBase64 = bundle.ico.split(",")[1]
-      const icoBytes = atob(icoBase64)
-      const icoArray = new Uint8Array(icoBytes.length)
-      for (let i = 0; i < icoBytes.length; i++) {
-        icoArray[i] = icoBytes.charCodeAt(i)
-      }
-      zip.file("favicon.ico", icoArray)
-
-      const manifest = generateManifest({
+      generateFaviconPack(canvas, {
         name: siteConfig.name,
         short_name: siteConfig.shortName,
       })
-      zip.file("site.webmanifest", JSON.stringify(manifest, null, 2))
-
-      const zipBlob = await zip.generateAsync({ type: "blob" })
-      saveAs(zipBlob, `favicon-pack-${siteConfig.shortName || Date.now()}.zip`)
     } catch (error) {
       console.error("Error generating favicon pack:", error)
       notifyError({

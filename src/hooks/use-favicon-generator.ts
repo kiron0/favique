@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { generateManifest, sizes } from "@/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -11,7 +9,6 @@ import {
 import { saveAs } from "file-saver"
 import JSZip from "jszip"
 import { useForm, UseFormReturn } from "react-hook-form"
-import WebFont from "webfontloader"
 
 import { textIconFormSchema, TextIconFormSchema } from "@/lib/schema"
 import { notifyError } from "@/components/toast"
@@ -29,12 +26,11 @@ const DEFAULT_VALUES: TextIconFormSchema = {
   roundness: "rounded",
 }
 
-export function useFaviconGenerator() {
+export function useFaviconGenerator(
+  canvasRef: React.RefObject<HTMLCanvasElement | null>
+) {
   const [img, setImg] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(false)
-  const canvasRef = React.useRef<HTMLCanvasElement>(
-    document.createElement("canvas")
-  )
 
   const form = useForm<TextIconFormSchema>({
     resolver: zodResolver(textIconFormSchema),
@@ -49,11 +45,22 @@ export function useFaviconGenerator() {
     [selectedFontFamily]
   )
 
-  const generateFaviconPack = async (_: TextIconFormSchema) => {
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && !canvasRef.current) {
+      canvasRef.current = document.createElement("canvas")
+    }
+  }, [])
+
+  const generateFaviconPack = async (
+    canvas: HTMLCanvasElement | null,
+    manifest?: { name: string; short_name: string }
+  ) => {
+    if (!canvas) return
+
     try {
       setLoading(true)
       const zip = new JSZip()
-      const favicon = new FaviconComposer(canvasRef.current)
+      const favicon = new FaviconComposer(canvas)
       const bundle = favicon.bundle()
 
       sizes.forEach(({ name, size }) => {
@@ -66,11 +73,14 @@ export function useFaviconGenerator() {
       const icoBase64 = bundle.ico.split(",")[1]
       zip.file("favicon.ico", icoBase64, { base64: true })
 
-      const manifest = generateManifest()
-      zip.file("site.webmanifest", JSON.stringify(manifest, null, 2))
+      const manifestJson = generateManifest({
+        name: manifest?.name,
+        short_name: manifest?.short_name,
+      })
+      zip.file("site.webmanifest", JSON.stringify(manifestJson, null, 2))
 
       const zipBlob = await zip.generateAsync({ type: "blob" })
-      saveAs(zipBlob, `favicon-pack-${Date.now()}.zip`)
+      saveAs(zipBlob, `favicon-pack-${manifest?.short_name || Date.now()}.zip`)
     } catch (error) {
       console.error("Error generating favicon pack:", error)
       notifyError({
@@ -83,7 +93,7 @@ export function useFaviconGenerator() {
   }
 
   const updateCanvas = React.useCallback(async () => {
-    if (typeof window === "undefined") return
+    if (typeof window === "undefined" || !canvasRef.current) return
 
     const data = form.getValues()
     const selectedFont = fontVariants.find((v) => v.name === data.fontWeight)
@@ -94,6 +104,8 @@ export function useFaviconGenerator() {
     }
 
     const [, weight, style] = selectedFont.name.split(" ")
+
+    const WebFont = (await import("webfontloader")).default
 
     await new Promise<void>((resolve) => {
       WebFont.load({
@@ -126,9 +138,11 @@ export function useFaviconGenerator() {
   }, [form, fontVariants])
 
   React.useEffect(() => {
-    updateCanvas()
-    const subscription = form.watch(updateCanvas)
-    return () => subscription.unsubscribe()
+    if (typeof window !== "undefined" && canvasRef.current) {
+      updateCanvas()
+      const subscription = form.watch(() => updateCanvas())
+      return () => subscription.unsubscribe()
+    }
   }, [form, updateCanvas])
 
   return {
