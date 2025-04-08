@@ -159,8 +159,10 @@ export function Converter() {
                 onDragOver={handleDrag}
                 onDrop={handleDrop}
                 className={cn(
-                  "hover:bg-secondary hover:border-primary cursor-pointer rounded-lg border-2 border-dashed text-center transition-colors",
-                  dragActive ? "bg-secondary border-primary" : "bg-background"
+                  "rounded-lg border-2 border-dashed text-center transition-colors",
+                  dragActive ? "bg-secondary border-primary" : "bg-background",
+                  !file &&
+                    "hover:bg-secondary hover:border-primary cursor-pointer"
                 )}
               >
                 {preview ? (
@@ -197,7 +199,10 @@ export function Converter() {
                     </Button>
                   </div>
                 ) : (
-                  <label htmlFor="file-upload" className="cursor-pointer">
+                  <label
+                    htmlFor="file-upload"
+                    className={cn(!file && "cursor-pointer")}
+                  >
                     <div className="flex min-h-60 flex-col items-center justify-center space-y-2">
                       <p className="text-muted-foreground">
                         Drag & drop an image here or

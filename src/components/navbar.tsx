@@ -2,9 +2,11 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { MenuItem, menuItems } from "@/utils"
 import { Menu } from "lucide-react"
 
+import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Sheet,
@@ -20,7 +22,7 @@ export function Navbar() {
   const { logo, menu, extra } = menuItems
 
   return (
-    <div className="border-b-muted dark:border-b-muted/50 bg-background/60 sticky top-0 z-50 mx-auto w-full border-b backdrop-blur-sm transition-colors duration-300">
+    <div className="bg-background sticky top-0 z-50 mx-auto w-full border-b">
       <div className="mx-auto w-full max-w-7xl p-4 xl:px-0">
         <nav className="hidden justify-between lg:flex">
           <div className="flex items-center gap-6">
@@ -134,12 +136,20 @@ const renderMenuItem = ({
   item: MenuItem
   setOpen: (open: boolean) => void
 }) => {
+  const pathname = usePathname()
+  const isActive = (url: string) => {
+    return pathname === url
+  }
+
   return (
     <div key={item.title} className="relative">
       <Link
         onClick={() => setOpen(false)}
         href={item.url}
-        className="hover:bg-muted/80 hover:text-accent-foreground inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors"
+        className={cn(
+          "hover:bg-muted/80 hover:text-accent-foreground inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors",
+          isActive(item.url) ? "underline decoration-2 underline-offset-6" : ""
+        )}
       >
         {item.title}
       </Link>

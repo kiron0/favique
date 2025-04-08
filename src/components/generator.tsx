@@ -100,32 +100,6 @@ export function Generator() {
                     />
                     <FormField
                       control={form.control}
-                      name="textColor"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Text Color</FormLabel>
-                          <FormControl>
-                            <ColorPicker {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="backgroundColor"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Background Color</FormLabel>
-                          <FormControl>
-                            <ColorPicker {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
                       name="roundness"
                       render={({ field }) => (
                         <FormItem>
@@ -150,6 +124,32 @@ export function Generator() {
                               ))}
                             </SelectContent>
                           </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="backgroundColor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Background Color</FormLabel>
+                          <FormControl>
+                            <ColorPicker {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="textColor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Text Color</FormLabel>
+                          <FormControl>
+                            <ColorPicker {...field} />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}

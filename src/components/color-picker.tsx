@@ -1,46 +1,61 @@
 import * as React from "react"
+import { HexColorPicker } from "react-colorful"
 
 import { cn } from "@/lib/utils"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+interface ColorPickerProps {
+  value?: string
+  onChange?: (color: string) => void
+  disabled?: boolean
+  className?: string
+}
 
 function ColorPicker({
-  className,
-  value,
+  value = "#ffffff",
+  onChange,
   disabled,
-  ...props
-}: React.ComponentProps<"input">) {
+  className,
+}: ColorPickerProps) {
+  const [open, setOpen] = React.useState(false)
+
   return (
-    <div className="relative inline-block w-full">
-      <label
-        htmlFor="color-picker"
-        className={cn(
-          "border-input block h-9 w-full overflow-hidden rounded-md border",
-          !disabled && "cursor-pointer",
-          "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-          disabled && "pointer-events-none cursor-not-allowed opacity-50",
-          className
-        )}
-      >
-        <div
-          className={cn("h-full w-full", !disabled && "cursor-pointer")}
-          style={{
-            backgroundColor: typeof value === "string" ? value : "#ffffff",
-          }}
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            "relative block h-20 w-full overflow-hidden rounded-md border",
+            !disabled && "cursor-pointer",
+            "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2",
+            disabled && "pointer-events-none cursor-not-allowed opacity-50",
+            className
+          )}
+          style={{ backgroundColor: value }}
+          disabled={disabled}
         >
-          <input
-            id="color-picker"
-            type="color"
-            className={cn(
-              "absolute inset-0 h-full w-full appearance-none border-none p-0 opacity-0",
-              !disabled && "cursor-pointer"
-            )}
-            value={value}
-            disabled={disabled}
-            {...props}
-          />
-        </div>
-      </label>
-    </div>
+          <span className="absolute inset-0 flex items-center justify-center font-semibold uppercase">
+            {value}
+          </span>
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0">
+        <HexColorPicker
+          color={value}
+          onChange={(newColor) => {
+            onChange?.(newColor)
+          }}
+          aria-disabled={disabled}
+          className="!w-[var(--radix-popover-trigger-width)]"
+        />
+      </PopoverContent>
+    </Popover>
   )
 }
+ColorPicker.displayName = "ColorPicker"
 
 export { ColorPicker }

@@ -20,7 +20,7 @@ const DEFAULT_VALUES: TextIconFormSchema = {
   fontFamily: "JetBrains Mono",
   fontStyle: "normal",
   textColor: "#ffffff",
-  backgroundColor: "#000000",
+  backgroundColor: "#209CEE",
   fontSize: 110,
   fontWeight: "Regular 400 Normal",
   roundness: "rounded",
