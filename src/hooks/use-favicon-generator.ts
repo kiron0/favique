@@ -15,15 +15,17 @@ import { notifyError } from "@/components/toast"
 
 import Fonts from "../../public/fonts.json"
 
-const DEFAULT_VALUES: TextIconFormSchema = {
+const DEFAULT_VALUES: TextIconGeneratorOptions = {
   text: "F",
+  width: 512,
+  height: 512,
   fontFamily: "JetBrains Mono",
   fontStyle: "normal",
-  textColor: "#ffffff",
+  fontColor: "#ffffff",
   backgroundColor: "#209CEE",
   fontSize: 110,
   fontWeight: "Regular 400 Normal",
-  roundness: "rounded",
+  shape: "rounded",
 }
 
 export function useFaviconGenerator(
@@ -122,11 +124,11 @@ export function useFaviconGenerator(
       text: data.text,
       fontFamily: data.fontFamily,
       fontStyle: style.toLowerCase() as "normal" | "italic",
-      fontColor: data.textColor,
+      fontColor: data.fontColor,
       backgroundColor: data.backgroundColor,
       fontSize: data.fontSize,
       fontWeight: weight,
-      shape: data.roundness as "square" | "circle" | "rounded",
+      shape: data.shape as "square" | "circle" | "rounded",
     }
 
     const generator = new TextIconGenerator(canvasRef.current)

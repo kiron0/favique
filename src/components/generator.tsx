@@ -100,7 +100,7 @@ export function Generator() {
                     />
                     <FormField
                       control={form.control}
-                      name="roundness"
+                      name="shape"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Background Roundness</FormLabel>
@@ -143,7 +143,7 @@ export function Generator() {
                     />
                     <FormField
                       control={form.control}
-                      name="textColor"
+                      name="fontColor"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Text Color</FormLabel>

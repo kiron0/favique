@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { CheckIcon, ChevronDownIcon } from "lucide-react"
+import { useDebounce } from "use-debounce"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -18,26 +19,85 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
-import Fonts from "../../public/fonts.json"
+interface Font {
+  family: string
+}
 
 interface FontsSelectionProps {
   value: string
   onValueChange: (value: string) => void
 }
 
+const PAGE_SIZE = 50
+const ALL_FONTS: Font[] = require("../../public/fonts.json")
+
 export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
-  const [open, setOpen] = React.useState<boolean>(false)
+  const [open, setOpen] = React.useState(false)
+  const [loadedCount, setLoadedCount] = React.useState(PAGE_SIZE)
+  const [searchQuery, setSearchQuery] = React.useState("")
+  const [debouncedQuery] = useDebounce(searchQuery, 300)
+  const sentinelRef = React.useRef<HTMLDivElement>(null)
 
   const filteredFonts = React.useMemo(() => {
-    return Fonts.map((font) => ({
-      family: font.family,
-    }))
-  }, [value])
+    if (!debouncedQuery) return ALL_FONTS
+    return ALL_FONTS.filter((font) =>
+      font.family.toLowerCase().includes(debouncedQuery.toLowerCase())
+    )
+  }, [debouncedQuery])
+
+  const visibleFonts = React.useMemo(() => {
+    return filteredFonts.slice(0, loadedCount)
+  }, [filteredFonts, loadedCount])
+
+  const loadMore = React.useCallback(() => {
+    if (loadedCount < filteredFonts.length) {
+      setLoadedCount((prev) => Math.min(prev + PAGE_SIZE, filteredFonts.length))
+    }
+  }, [filteredFonts.length, loadedCount])
+
+  React.useEffect(() => {
+    setLoadedCount(PAGE_SIZE)
+  }, [debouncedQuery])
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && loadedCount < filteredFonts.length) {
+          loadMore()
+        }
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    )
+
+    const currentSentinel = sentinelRef.current
+    if (currentSentinel) {
+      observer.observe(currentSentinel)
+    }
+
+    return () => {
+      if (currentSentinel) {
+        observer.unobserve(currentSentinel)
+      }
+      observer.disconnect()
+    }
+  }, [loadMore, filteredFonts.length, loadedCount])
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover
+      open={open}
+      onOpenChange={(open) => {
+        setOpen(open)
+        if (!open) {
+          setLoadedCount(PAGE_SIZE)
+          setSearchQuery("")
+        }
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -46,10 +106,7 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
           className="bg-background hover:bg-background border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px]"
         >
           <span className={cn("truncate", !value && "text-muted-foreground")}>
-            {value
-              ? filteredFonts.find((framework) => framework.family === value)
-                  ?.family
-              : "Select font family"}
+            {value || "Select font family"}
           </span>
           <ChevronDownIcon
             size={16}
@@ -62,28 +119,36 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
         className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
         align="start"
       >
-        <Command>
-          <CommandInput placeholder="Search font..." />
+        <Command shouldFilter={false}>
+          <CommandInput
+            placeholder={`Search from ${ALL_FONTS.length} (initially ${
+              PAGE_SIZE
+            }) fonts...`}
+            onValueChange={setSearchQuery}
+          />
           <CommandList>
             <CommandEmpty>No font found.</CommandEmpty>
-            <CommandGroup className="px-0">
-              <ScrollArea className="h-[300px] w-full px-3">
-                {filteredFonts.map((framework) => (
-                  <CommandItem
-                    key={framework.family}
-                    value={framework.family}
-                    onSelect={(currentValue) => {
-                      onValueChange(currentValue)
-                      setOpen(false)
-                    }}
-                  >
-                    {framework.family}
-                    {value === framework.family && (
-                      <CheckIcon size={16} className="ml-auto" />
-                    )}
-                  </CommandItem>
-                ))}
-              </ScrollArea>
+            <CommandGroup>
+              {visibleFonts.map((font) => (
+                <CommandItem
+                  key={font.family}
+                  value={font.family}
+                  onSelect={(currentValue) => {
+                    onValueChange(currentValue)
+                    setOpen(false)
+                    setLoadedCount(PAGE_SIZE)
+                    setSearchQuery("")
+                  }}
+                >
+                  {font.family}
+                  {value === font.family && (
+                    <CheckIcon size={16} className="ml-auto" />
+                  )}
+                </CommandItem>
+              ))}
+              {loadedCount < filteredFonts.length && (
+                <div ref={sentinelRef} className="h-1 w-full" />
+              )}
             </CommandGroup>
           </CommandList>
         </Command>

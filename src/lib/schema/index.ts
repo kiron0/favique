@@ -2,7 +2,7 @@ import { z } from "zod"
 
 export const textIconFormSchema = z.object({
   text: z.string().min(1, { message: "Logo text is required" }),
-  textColor: z.string().min(1, { message: "Text color is required" }),
+  fontColor: z.string().min(1, { message: "Font color is required" }),
   backgroundColor: z
     .string()
     .min(1, { message: "Background color is required" }),
@@ -12,6 +12,15 @@ export const textIconFormSchema = z.object({
     message: "Font size must be between 16 and 170",
   }),
   fontWeight: z.string().min(1, { message: "Font weight is required" }),
-  roundness: z.string().min(1, { message: "Roundness is required" }),
+  shape: z.nativeEnum(
+    {
+      square: "square",
+      circle: "circle",
+      rounded: "rounded",
+    },
+    {
+      errorMap: () => ({ message: "Shape is required" }),
+    }
+  ),
 })
 export type TextIconFormSchema = z.infer<typeof textIconFormSchema>
