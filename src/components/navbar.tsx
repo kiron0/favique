@@ -22,7 +22,7 @@ export function Navbar() {
   const { logo, menu, extra } = menuItems
 
   return (
-    <div className="bg-background sticky top-0 z-50 mx-auto w-full border-b">
+    <div className="bg-background sticky top-0 z-[99] mx-auto w-full border-b">
       <div className="mx-auto w-full max-w-7xl p-4 xl:px-0">
         <nav className="hidden justify-between lg:flex">
           <div className="flex items-center gap-6">

@@ -12,7 +12,9 @@ export function Providers({
   return (
     <>
       <Navbar />
-      <main className="flex min-h-svh w-full flex-col">{children}</main>
+      <main className="flex min-h-svh w-full flex-col overflow-auto">
+        {children}
+      </main>
       <Footer />
       <Toaster />
       <NextTopLoader showForHashAnchor={false} />

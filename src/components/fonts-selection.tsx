@@ -51,10 +51,8 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
   }, [filteredFonts, loadedCount])
 
   const loadMore = React.useCallback(() => {
-    if (loadedCount < filteredFonts.length) {
-      setLoadedCount((prev) => Math.min(prev + PAGE_SIZE, filteredFonts.length))
-    }
-  }, [filteredFonts.length, loadedCount])
+    setLoadedCount((prev) => Math.min(prev + PAGE_SIZE, filteredFonts.length))
+  }, [filteredFonts.length])
 
   React.useEffect(() => {
     setLoadedCount(PAGE_SIZE)
@@ -85,7 +83,7 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
       }
       observer.disconnect()
     }
-  }, [loadMore, filteredFonts.length, loadedCount])
+  }, [loadMore, filteredFonts.length, loadedCount, sentinelRef])
 
   return (
     <Popover
@@ -147,7 +145,11 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
                 </CommandItem>
               ))}
               {loadedCount < filteredFonts.length && (
-                <div ref={sentinelRef} className="h-1 w-full" />
+                <div
+                  ref={sentinelRef}
+                  key={`sentinel-${loadedCount}`}
+                  className="h-1 w-full"
+                />
               )}
             </CommandGroup>
           </CommandList>
