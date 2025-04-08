@@ -50,7 +50,7 @@ function ColorPicker({
             onChange?.(newColor)
           }}
           aria-disabled={disabled}
-          className="!w-[var(--radix-popover-trigger-width)]"
+          className="min-w-[var(--radix-popover-trigger-width)]"
         />
       </PopoverContent>
     </Popover>
