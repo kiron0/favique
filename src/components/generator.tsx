@@ -26,6 +26,8 @@ import { Slider } from "@/components/ui/slider"
 import { FontsSelection } from "@/components/fonts-selection"
 import { Hero } from "@/components/hero"
 
+import { ColorPicker } from "./color-picker"
+
 export function Generator() {
   const { img, loading, form, fontVariants, generateFaviconPack } =
     useFaviconGenerator()
@@ -66,7 +68,33 @@ export function Generator() {
                         <FormItem>
                           <FormLabel>Text</FormLabel>
                           <FormControl>
-                            <Input placeholder="Text" {...field} />
+                            <Input type="text" placeholder="Text" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="textColor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Text Color</FormLabel>
+                          <FormControl>
+                            <ColorPicker {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="backgroundColor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Background Color</FormLabel>
+                          <FormControl>
+                            <ColorPicker disabled {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
