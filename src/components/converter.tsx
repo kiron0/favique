@@ -12,52 +12,72 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Hero } from "@/components/hero"
 import { notifyError } from "@/components/toast"
 
-import { Hero } from "./hero"
+interface TState {
+  file: File | null
+  preview: string | null
+  loading: boolean
+  dragActive: boolean
+  wantToAddSiteName: boolean
+  siteConfig: {
+    name: string
+    short_name: string
+  }
+}
 
 export function Converter() {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
   const { generateFaviconPack } = useFaviconGenerator(canvasRef)
-  const [file, setFile] = React.useState<File | null>(null)
-  const [preview, setPreview] = React.useState<string | null>(null)
-  const [loading, setLoading] = React.useState(false)
-  const [dragActive, setDragActive] = React.useState(false)
-  const [wantToAddSiteName, setWantToAddSiteName] = React.useState(false)
-  const [siteConfig, setSiteConfig] = React.useState<{
-    name: string
-    shortName: string
-  }>({
-    name: "",
-    shortName: "",
+
+  const [state, setState] = React.useState<TState>({
+    file: null,
+    preview: null,
+    loading: false,
+    dragActive: false,
+    wantToAddSiteName: false,
+    siteConfig: {
+      name: "",
+      short_name: "",
+    },
   })
+
+  const updateState = (newState: Partial<typeof state>) => {
+    setState((prevState) => ({ ...prevState, ...newState }))
+  }
+
+  const { file, preview, loading, dragActive, wantToAddSiteName, siteConfig } =
+    state
 
   const handleFile = (file: File) => {
     if (!file) {
-      setDragActive(false)
+      updateState({ dragActive: false })
       return notifyError({
         title: "Invalid file",
         description: "Please select a valid image (PNG/JPG/SVG, max 5MB)",
       })
     }
     if (file.size > MAX_FILE_SIZE) {
-      setDragActive(false)
+      updateState({ dragActive: false })
       return notifyError({
         title: "File too large",
         description: `Please select a file smaller than ${MAX_FILE_SIZE} MB.`,
       })
     }
     if (!SUPPORTED_TYPES.includes(file.type)) {
-      setDragActive(false)
+      updateState({ dragActive: false })
       return notifyError({
         title: "Unsupported file type",
         description: "Please select a PNG, JPG, or SVG file.",
       })
     }
 
-    setFile(file)
-    setPreview(URL.createObjectURL(file))
-    setDragActive(false)
+    updateState({
+      file,
+      preview: URL.createObjectURL(file),
+      dragActive: false,
+    })
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +91,7 @@ export function Converter() {
 
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
-    setDragActive(e.type === "dragenter" || e.type === "dragover")
+    updateState({ dragActive: e.type === "dragenter" || e.type === "dragover" })
   }
 
   const handleGenerate = async () => {
@@ -82,7 +102,7 @@ export function Converter() {
       })
     }
 
-    if (wantToAddSiteName && (!siteConfig.name || !siteConfig.shortName)) {
+    if (wantToAddSiteName && (!siteConfig.name || !siteConfig.short_name)) {
       return notifyError({
         title: "Missing site name",
         description:
@@ -90,7 +110,7 @@ export function Converter() {
       })
     }
 
-    setLoading(true)
+    updateState({ loading: true })
 
     try {
       const img = await loadImage(file)
@@ -103,7 +123,7 @@ export function Converter() {
 
       generateFaviconPack(canvas, {
         name: siteConfig.name,
-        short_name: siteConfig.shortName,
+        short_name: siteConfig.short_name,
       })
     } catch (error) {
       console.error("Error generating favicon pack:", error)
@@ -112,7 +132,9 @@ export function Converter() {
         description: "Please try again later.",
       })
     } finally {
-      setLoading(false)
+      updateState({
+        loading: false,
+      })
     }
   }
 
@@ -157,16 +179,18 @@ export function Converter() {
                     </p>
                     <Button
                       variant="destructive"
-                      onClick={() => {
-                        setFile(null)
-                        setPreview(null)
-                        setDragActive(false)
-                        setWantToAddSiteName(false)
-                        setSiteConfig({
-                          name: "",
-                          shortName: "",
+                      onClick={() =>
+                        updateState({
+                          file: null,
+                          preview: null,
+                          dragActive: false,
+                          wantToAddSiteName: false,
+                          siteConfig: {
+                            name: "",
+                            short_name: "",
+                          },
                         })
-                      }}
+                      }
                       className="absolute top-2 right-2 h-8 w-8 rounded-full p-0"
                     >
                       <X className="size-4" />
@@ -197,9 +221,9 @@ export function Converter() {
                   id="want-to-add-site-name"
                   checked={wantToAddSiteName}
                   onCheckedChange={(value) => {
-                    setWantToAddSiteName(value as boolean)
+                    updateState({ wantToAddSiteName: value as boolean })
                     if (!value) {
-                      setSiteConfig({ name: "", shortName: "" })
+                      updateState({ siteConfig: { name: "", short_name: "" } })
                     }
                   }}
                 />
@@ -226,7 +250,12 @@ export function Converter() {
                       placeholder="Enter your site name"
                       value={siteConfig.name}
                       onChange={(e) =>
-                        setSiteConfig({ ...siteConfig, name: e.target.value })
+                        updateState({
+                          siteConfig: {
+                            ...siteConfig,
+                            name: e.target.value,
+                          },
+                        })
                       }
                     />
                   </div>
@@ -235,11 +264,13 @@ export function Converter() {
                     <Input
                       type="text"
                       placeholder="Enter your site short name"
-                      value={siteConfig.shortName}
+                      value={siteConfig.short_name}
                       onChange={(e) =>
-                        setSiteConfig({
-                          ...siteConfig,
-                          shortName: e.target.value,
+                        updateState({
+                          siteConfig: {
+                            ...siteConfig,
+                            short_name: e.target.value,
+                          },
                         })
                       }
                     />
