@@ -21,3 +21,9 @@ export const loadImage = (file: File): Promise<HTMLImageElement> => {
     img.src = URL.createObjectURL(file)
   })
 }
+
+export const roundnessOptions = [
+  { value: "square", label: "Square" },
+  { value: "circle", label: "Circle" },
+  { value: "rounded", label: "Rounded" },
+]

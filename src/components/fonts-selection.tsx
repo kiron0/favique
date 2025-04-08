@@ -32,11 +32,11 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
   const filteredFonts = React.useMemo(() => {
     return Fonts.map((font) => ({
       family: font.family,
-    })).slice(0, 100)
+    }))
   }, [value])
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"

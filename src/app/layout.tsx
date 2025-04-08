@@ -1,13 +1,13 @@
 import type { Metadata } from "next"
-import { JetBrains_Mono } from "next/font/google"
+import { Source_Code_Pro } from "next/font/google"
 import { Providers } from "@/providers"
 
 import { cn } from "@/lib/utils"
 
 import "@/styles/globals.css"
 
-const jetbrainsMono = JetBrains_Mono({
-  weight: ["400", "500", "600", "700", "800"],
+const sourceCodePro = Source_Code_Pro({
+  weight: ["400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
 })
 
@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("antialiased", jetbrainsMono.className)}>
+      <body className={cn("antialiased", sourceCodePro.className)}>
         <Providers>{children}</Providers>
       </body>
     </html>
