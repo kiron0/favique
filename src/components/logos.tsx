@@ -4,7 +4,7 @@ import { Hero } from "@/components/hero"
 
 export function Logos() {
   return (
-    <div className="space-y-4 md:space-y-8">
+    <div className="space-y-4 pb-2 md:space-y-8">
       <Hero
         title="Logo Generator"
         description="Generate a logo by configuring the settings below. Download your logo in a variety of layouts and formats."

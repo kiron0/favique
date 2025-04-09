@@ -34,14 +34,14 @@ export function Generator() {
     useFaviconGenerator(canvasRef)
 
   return (
-    <div className="space-y-4 md:space-y-8">
+    <div className="space-y-4 pb-2 md:space-y-8">
       <Hero
         title="Favicon Generator / Generate from Text"
         description="Quickly generate your favicon from text by selecting the text, fonts, and colors. Download your favicon in the most up-to-date formats."
       />
       <div className="mx-auto w-full max-w-7xl">
         {img && (
-          <div className="mx-3 mb-8 flex justify-between border-b pb-4 xl:mx-0">
+          <div className="mx-4 mb-8 flex justify-between border-b pb-4 xl:mx-0">
             <div className="flex w-full items-center gap-4">
               <h2 className="text-base font-bold md:text-lg">Preview</h2>
               <div className="flex w-full items-center gap-3">
@@ -85,8 +85,8 @@ export function Generator() {
             </div>
           </div>
         )}
-        <div className="mx-3 flex-col space-y-8 xl:mx-0">
-          <Card className="w-full rounded-md border-none">
+        <div className="mx-4 flex-col space-y-8 xl:mx-0">
+          <Card className="w-full border-none">
             <CardHeader>
               <CardTitle className="text-xl font-bold md:text-2xl">
                 Generate From Text

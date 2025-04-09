@@ -132,14 +132,14 @@ export function Converter() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-8">
+    <div className="space-y-4 pb-2 md:space-y-8">
       <Hero
         title="Favicon Converter / Generate from Image"
         description="Quickly generate your favicon from an image by uploading your image below. Download your favicon in the most up to date formats."
       />
       <div className="mx-auto w-full max-w-7xl">
         <div className="mx-3 max-w-2xl flex-col space-y-8 xl:mx-0">
-          <Card className="w-full rounded-md border-none">
+          <Card className="w-full border-none">
             <CardHeader>
               <CardTitle className="text-xl font-bold md:text-2xl">
                 Converter
@@ -196,7 +196,7 @@ export function Converter() {
                     htmlFor="file-upload"
                     className={cn(!file && "cursor-pointer")}
                   >
-                    <div className="flex min-h-60 flex-col items-center justify-center space-y-2">
+                    <div className="flex min-h-60 flex-col items-center justify-center space-y-2 text-balance">
                       <p className="text-muted-foreground">
                         Drag & drop an image here or
                       </p>
