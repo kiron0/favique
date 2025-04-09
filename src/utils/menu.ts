@@ -13,6 +13,10 @@ export const menuItems: MenuItem[] = [
     url: "/generator",
   },
   {
+    title: "Emojis",
+    url: "/emoji",
+  },
+  {
     title: "Logos",
     url: "/logos",
   },

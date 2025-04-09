@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import EmojiImg from "@/assets/emoji.png"
 import ConverterImg from "@/assets/image.png"
 import GeneratorImg from "@/assets/text.png"
 
@@ -21,6 +22,13 @@ const menuItems = [
     img: GeneratorImg,
     description:
       "If you don't have a logo or image for your website and want to generate a favicon from scratch then use this tool to generate your favicon.",
+  },
+  {
+    name: "Emoji",
+    path: "/emoji",
+    img: EmojiImg,
+    description:
+      "Want to use an emoji for your favicon? Choose from a list of hundreds of emojis to generate a favicon for your website.",
   },
 ]
 
@@ -45,6 +53,8 @@ export function Home() {
                 className="h-48 w-full object-cover"
                 width={item.img.width}
                 height={item.img.height}
+                placeholder="blur"
+                blurDataURL={item.img.blurDataURL}
                 alt={item.name}
               />
               <div className="flex flex-col justify-center gap-2 p-4">

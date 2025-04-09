@@ -1,4 +1,6 @@
 export * from "./base-url"
+export * from "./get-emoji-url"
+export * from "./img-to-url"
 export * from "./manifest"
 export * from "./menu"
 export * from "./sizes"
