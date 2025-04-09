@@ -1,5 +1,5 @@
 import * as React from "react"
-import { generateManifest, sizes } from "@/utils"
+import { generateManifest, loadImage, sizes } from "@/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   FaviconComposer,
@@ -57,30 +57,13 @@ export function useFaviconGenerator(
   ) => {
     if (!canvas) return
 
+    setLoading(true)
+
     try {
-      setLoading(true)
-      const zip = new JSZip()
-      const favicon = new FaviconComposer(canvas)
-      const bundle = favicon.bundle()
-
-      sizes.forEach(({ name, size }) => {
-        const dataUrl = bundle[`png${size}` as keyof typeof bundle]
-        if (!dataUrl) return
-        const base64Data = dataUrl.split(",")[1]
-        zip.file(name, base64Data, { base64: true })
+      generateBundle({
+        canvas,
+        manifest,
       })
-
-      const icoBase64 = bundle.ico.split(",")[1]
-      zip.file("favicon.ico", icoBase64, { base64: true })
-
-      const manifestJson = generateManifest({
-        name: manifest?.name,
-        short_name: manifest?.short_name,
-      })
-      zip.file("site.webmanifest", JSON.stringify(manifestJson, null, 2))
-
-      const zipBlob = await zip.generateAsync({ type: "blob" })
-      saveAs(zipBlob, `favicon-pack-${manifest?.short_name || Date.now()}.zip`)
     } catch (error) {
       console.error("Error generating favicon pack:", error)
       notifyError({
@@ -90,6 +73,58 @@ export function useFaviconGenerator(
     } finally {
       setLoading(false)
     }
+  }
+
+  const generateBundle = async ({
+    canvas,
+    image,
+    manifest,
+  }: {
+    canvas: HTMLCanvasElement | null
+    image?: File | null
+    manifest?: { name: string; short_name: string }
+  }) => {
+    if (!canvas) return
+
+    const zip = new JSZip()
+
+    if (image) {
+      const img = await loadImage(image)
+
+      canvas.width = img.width
+      canvas.height = img.height
+
+      const ctx = canvas.getContext("2d")
+      if (!ctx) throw new Error("Failed to get canvas context")
+      ctx.drawImage(img, 0, 0)
+    }
+
+    const favicon = new FaviconComposer(canvas)
+    const bundle = favicon.bundle()
+
+    sizes.forEach(({ name, size }) => {
+      const dataUrl = bundle[`png${size}` as keyof typeof bundle]
+      if (!dataUrl) return
+      const base64Data = dataUrl.split(",")[1]
+      zip.file(name, base64Data, { base64: true })
+    })
+
+    const icoBase64 = bundle.ico.split(",")[1]
+    const icoBytes = atob(icoBase64)
+    const icoArray = new Uint8Array(icoBytes.length)
+    for (let i = 0; i < icoBytes.length; i++) {
+      icoArray[i] = icoBytes.charCodeAt(i)
+    }
+    zip.file("favicon.ico", icoArray)
+
+    const manifestJson = generateManifest({
+      name: manifest?.name,
+      short_name: manifest?.short_name,
+    })
+    zip.file("site.webmanifest", JSON.stringify(manifestJson, null, 2))
+
+    const zipBlob = await zip.generateAsync({ type: "blob" })
+    saveAs(zipBlob, `favicon-pack-${manifest?.short_name || Date.now()}.zip`)
   }
 
   const updateCanvas = React.useCallback(async () => {
@@ -151,6 +186,7 @@ export function useFaviconGenerator(
     form,
     fontVariants,
     generateFaviconPack,
+    generateBundle,
     canvasRef,
   }
 }

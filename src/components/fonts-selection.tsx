@@ -119,9 +119,7 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
       >
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder={`Search from ${ALL_FONTS.length} (initially ${
-              PAGE_SIZE
-            }) fonts...`}
+            placeholder={`Search from ${ALL_FONTS.length} fonts...`}
             onValueChange={setSearchQuery}
           />
           <CommandList>

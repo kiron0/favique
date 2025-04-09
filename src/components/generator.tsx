@@ -4,7 +4,6 @@ import * as React from "react"
 import { roundnessOptions } from "@/utils"
 import { Loader2 } from "lucide-react"
 
-import { useFavicon } from "@/hooks/use-favicon"
 import { useFaviconGenerator } from "@/hooks/use-favicon-generator"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -35,12 +34,6 @@ export function Generator() {
   const { img, loading, form, fontVariants, generateFaviconPack } =
     useFaviconGenerator(canvasRef)
 
-  try {
-    useFavicon(img)
-  } catch (error) {
-    console.error("Error setting favicon:", error)
-  }
-
   return (
     <div className="space-y-4 md:space-y-8">
       <Hero
@@ -49,30 +42,44 @@ export function Generator() {
       />
       <div className="mx-auto w-full max-w-7xl">
         {img && (
-          <div className="mx-3 my-8 flex w-full flex-col space-y-4 xl:mx-0">
-            <h2 className="text-xl font-bold md:text-2xl">Preview</h2>
-            <div className="flex w-full items-end justify-center gap-5">
-              <img
-                src={img}
-                alt="Generated Favicon"
-                draggable={false}
-                onContextMenu={(e) => e.preventDefault()}
-                className="h-auto w-28 select-none"
-              />
-              <img
-                src={img}
-                alt="Generated Favicon"
-                draggable={false}
-                onContextMenu={(e) => e.preventDefault()}
-                className="h-auto w-16 select-none"
-              />
-              <img
-                src={img}
-                alt="Generated Favicon"
-                draggable={false}
-                onContextMenu={(e) => e.preventDefault()}
-                className="h-auto w-8 select-none"
-              />
+          <div className="mx-3 mb-8 flex justify-between border-b pb-4 xl:mx-0">
+            <div className="flex w-full items-center gap-4">
+              <h2 className="text-base font-bold md:text-lg">Preview</h2>
+              <div className="flex w-full items-center gap-3">
+                <img
+                  src={img}
+                  alt="Generated Favicon"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="h-auto w-12 select-none"
+                />
+                <img
+                  src={img}
+                  alt="Generated Favicon"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="h-auto w-8 select-none"
+                />
+                <img
+                  src={img}
+                  alt="Generated Favicon"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="h-auto w-4 select-none"
+                />
+              </div>
+            </div>
+            <div className="flex w-full items-center justify-end gap-4">
+              <Button disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Downloading...
+                  </>
+                ) : (
+                  "Download"
+                )}
+              </Button>
             </div>
           </div>
         )}

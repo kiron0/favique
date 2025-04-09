@@ -18,6 +18,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 
+import { ToggleTheme } from "./toggle-theme"
+
 export function Navbar() {
   const [open, setOpen] = React.useState(false)
 
@@ -70,6 +72,7 @@ export function Navbar() {
             >
               Buy me a coffee
             </a>
+            <ToggleTheme />
           </div>
         </nav>
         <div className="lg:hidden">
@@ -88,68 +91,71 @@ export function Navbar() {
                 {siteConfig.name}
               </span>
             </Link>
-            <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="size-4" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="z-[56] w-11/12 overflow-y-auto">
-                <SheetHeader>
-                  <SheetTitle>
-                    <Link href="/" className="flex items-center gap-2">
-                      <Image
-                        src={siteConfig.logo}
-                        width={512}
-                        height={512}
-                        className="h-8 w-8 select-none"
-                        draggable={false}
-                        onContextMenu={(e) => e.preventDefault()}
-                        alt={siteConfig.name}
-                      />
-                      <span className="text-lg font-semibold tracking-tighter">
-                        {siteConfig.name}
-                      </span>
-                    </Link>
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="flex flex-col gap-6 p-4">
-                  <div
-                    data-slot="navigation-menu"
-                    className="group/navigation-menu relative flex max-w-max flex-1 items-center justify-center"
-                  >
-                    <div className="group flex flex-1 list-none flex-col items-start justify-center gap-2">
-                      {menuItems.map((item) =>
-                        renderMenuItem({
-                          item,
-                          setOpen,
-                        })
-                      )}
+            <div className="flex items-center gap-4">
+              <ToggleTheme />
+              <Sheet open={open} onOpenChange={setOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Menu className="size-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent className="z-[56] w-11/12 overflow-y-auto">
+                  <SheetHeader>
+                    <SheetTitle>
+                      <Link href="/" className="flex items-center gap-2">
+                        <Image
+                          src={siteConfig.logo}
+                          width={512}
+                          height={512}
+                          className="h-8 w-8 select-none"
+                          draggable={false}
+                          onContextMenu={(e) => e.preventDefault()}
+                          alt={siteConfig.name}
+                        />
+                        <span className="text-lg font-semibold tracking-tighter">
+                          {siteConfig.name}
+                        </span>
+                      </Link>
+                    </SheetTitle>
+                  </SheetHeader>
+                  <div className="flex flex-col gap-6 p-4">
+                    <div
+                      data-slot="navigation-menu"
+                      className="group/navigation-menu relative flex max-w-max flex-1 items-center justify-center"
+                    >
+                      <div className="group flex flex-1 list-none flex-col items-start justify-center gap-2">
+                        {menuItems.map((item) =>
+                          renderMenuItem({
+                            item,
+                            setOpen,
+                          })
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <a
+                        href={siteConfig.links.portfolio}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setOpen(false)}
+                        className={buttonVariants({ variant: "outline" })}
+                      >
+                        Author
+                      </a>
+                      <a
+                        href="https://buymeacoffee.com/_thk"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setOpen(false)}
+                        className={buttonVariants()}
+                      >
+                        Buy me a coffee
+                      </a>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-3">
-                    <a
-                      href={siteConfig.links.portfolio}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setOpen(false)}
-                      className={buttonVariants({ variant: "outline" })}
-                    >
-                      Author
-                    </a>
-                    <a
-                      href="https://buymeacoffee.com/_thk"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setOpen(false)}
-                      className={buttonVariants()}
-                    >
-                      Buy me a coffee
-                    </a>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </div>

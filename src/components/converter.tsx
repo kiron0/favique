@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import ImageView from "next/image"
-import { loadImage, MAX_FILE_SIZE, SUPPORTED_TYPES } from "@/utils"
+import { MAX_FILE_SIZE, SUPPORTED_TYPES } from "@/utils"
 import { Loader2, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -29,7 +29,7 @@ interface TState {
 
 export function Converter() {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
-  const { generateFaviconPack } = useFaviconGenerator(canvasRef)
+  const { generateBundle } = useFaviconGenerator(canvasRef)
 
   const [state, setState] = React.useState<TState>({
     file: null,
@@ -113,17 +113,10 @@ export function Converter() {
     updateState({ loading: true })
 
     try {
-      const img = await loadImage(file)
-
-      const canvas = canvasRef.current
-      if (!canvas) throw new Error("Canvas not found")
-
-      canvas.width = img.width
-      canvas.height = img.height
-
-      generateFaviconPack(canvas, {
-        name: siteConfig.name,
-        short_name: siteConfig.short_name,
+      generateBundle({
+        canvas: canvasRef.current,
+        image: file,
+        manifest: wantToAddSiteName ? siteConfig : undefined,
       })
     } catch (error) {
       console.error("Error generating favicon pack:", error)
