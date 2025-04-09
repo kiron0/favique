@@ -23,9 +23,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
+import { Banner } from "@/components/banner"
 import { ColorPicker } from "@/components/color-picker"
+import { CustomImage } from "@/components/custom-image"
 import { FontsSelection } from "@/components/fonts-selection"
-import { Hero } from "@/components/hero"
 
 export function Generator() {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
@@ -35,7 +36,7 @@ export function Generator() {
 
   return (
     <div className="space-y-4 pb-2 md:space-y-8">
-      <Hero
+      <Banner
         title="Favicon Generator / Generate from Text"
         description="Quickly generate your favicon from text by selecting the text, fonts, and colors. Download your favicon in the most up-to-date formats."
       />
@@ -45,26 +46,26 @@ export function Generator() {
             <div className="flex w-full items-center gap-4">
               <h2 className="text-base font-bold md:text-lg">Preview</h2>
               <div className="flex w-full items-center gap-3">
-                <img
+                <CustomImage
                   src={img}
+                  width={128}
+                  height={128}
                   alt="Generated Favicon"
-                  draggable={false}
-                  onContextMenu={(e) => e.preventDefault()}
-                  className="h-auto w-12 select-none"
+                  className="h-auto w-12"
                 />
-                <img
+                <CustomImage
                   src={img}
+                  width={128}
+                  height={128}
                   alt="Generated Favicon"
-                  draggable={false}
-                  onContextMenu={(e) => e.preventDefault()}
-                  className="h-auto w-8 select-none"
+                  className="h-auto w-8"
                 />
-                <img
+                <CustomImage
                   src={img}
+                  width={128}
+                  height={128}
                   alt="Generated Favicon"
-                  draggable={false}
-                  onContextMenu={(e) => e.preventDefault()}
-                  className="h-auto w-4 select-none"
+                  className="h-auto w-4"
                 />
               </div>
             </div>

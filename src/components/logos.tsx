@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, UseFormReturn } from "react-hook-form"
 import { z } from "zod"
 
-import { Hero } from "@/components/hero"
+import { Banner } from "@/components/banner"
 
 const logoFormSchema = z.object({
   logoText: z.string().min(1, "Logo text is required"),
@@ -43,7 +43,7 @@ export function Logos() {
 
   return (
     <div className="space-y-4 pb-2 md:space-y-8">
-      <Hero
+      <Banner
         title="Logo Generator"
         description="Generate a logo by configuring the settings below. Download your logo in a variety of layouts and formats."
       />

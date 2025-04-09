@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: {
-      default: `${siteConfig.name} - ${siteConfig.slogan}`,
+      default: `${siteConfig.slogan} - ${siteConfig.name}`,
       template: `%s - ${siteConfig.name}`,
     },
     metadataBase: new URL(BASE_URL),

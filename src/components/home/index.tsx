@@ -1,11 +1,11 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import ConverterImg from "@/assets/image.png"
 import GeneratorImg from "@/assets/text.png"
 
-import { Hero } from "../hero"
+import { Banner } from "@/components/banner"
+import { CustomImage } from "@/components/custom-image"
 
 const menuItems = [
   {
@@ -27,7 +27,7 @@ const menuItems = [
 export function Home() {
   return (
     <div className="space-y-12">
-      <Hero
+      <Banner
         title="Favicon Generator"
         description="The only favicon generator you need for your next project. Quickly generate your favicon from text, image, or choose from hundreds of emojis."
       />
@@ -40,14 +40,12 @@ export function Home() {
               href={item.path}
               className="flex flex-col items-center overflow-hidden rounded-xl border shadow-sm transition-shadow duration-300 hover:shadow-lg"
             >
-              <Image
+              <CustomImage
                 src={item.img.src}
-                className="h-48 w-full object-cover select-none"
+                className="h-48 w-full object-cover"
                 width={item.img.width}
                 height={item.img.height}
                 alt={item.name}
-                draggable={false}
-                onContextMenu={(e) => e.preventDefault()}
               />
               <div className="flex flex-col justify-center gap-2 p-4">
                 <h2 className="text-lg font-semibold">{item.name}</h2>

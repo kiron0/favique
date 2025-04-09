@@ -5,6 +5,7 @@ import { siteConfig } from "@/config"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Logo } from "@/components/logo"
 import { notifyError, notifySuccess } from "@/components/toast"
 
 export function Footer() {
@@ -38,13 +39,10 @@ export function Footer() {
 
   return (
     <footer className="bg-secondary mt-16 space-y-10 pb-10 md:mt-20">
-      <div className="border-input border-b" />
+      <div className="border-b" />
       <div className="mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-10 px-4 text-center lg:flex-row lg:text-left xl:px-0">
         <div className="flex w-full shrink flex-col items-center justify-between gap-6 lg:max-w-96 lg:items-start">
-          <div className="flex items-center gap-2 lg:justify-start">
-            <img src={siteConfig.logo} alt={siteConfig.name} className="h-8" />
-            <h2 className="text-xl font-semibold">{siteConfig.name}</h2>
-          </div>
+          <Logo className="lg:justify-start" />
           <p className="text-muted-foreground text-sm">{siteConfig.slogan}</p>
         </div>
         <div className="mx-auto w-full space-y-2 sm:w-fit lg:mx-0">
@@ -59,7 +57,7 @@ export function Footer() {
             <Input
               id="email"
               placeholder="Enter your email"
-              className="w-72"
+              className="min-w-72"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />

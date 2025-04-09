@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { siteConfig } from "@/config"
@@ -17,8 +16,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-
-import { ToggleTheme } from "./toggle-theme"
+import { Logo } from "@/components/logo"
+import { ToggleTheme } from "@/components/toggle-theme"
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false)
@@ -28,20 +27,7 @@ export function Navbar() {
       <div className="mx-auto w-full max-w-7xl p-4 xl:px-0">
         <nav className="hidden justify-between lg:flex">
           <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center gap-2">
-              <Image
-                src={siteConfig.logo}
-                width={512}
-                height={512}
-                className="h-8 w-8 select-none"
-                draggable={false}
-                onContextMenu={(e) => e.preventDefault()}
-                alt={siteConfig.name}
-              />
-              <span className="text-lg font-semibold tracking-tighter">
-                {siteConfig.name}
-              </span>
-            </Link>
+            <Logo href="/" />
             <div className="flex items-center">
               <div className="relative flex max-w-max flex-1 items-center justify-center">
                 <div className="group flex flex-1 list-none items-center justify-center gap-1">
@@ -77,20 +63,7 @@ export function Navbar() {
         </nav>
         <div className="lg:hidden">
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <Image
-                src={siteConfig.logo}
-                width={512}
-                height={512}
-                className="h-8 w-8 select-none"
-                draggable={false}
-                onContextMenu={(e) => e.preventDefault()}
-                alt={siteConfig.name}
-              />
-              <span className="text-lg font-semibold tracking-tighter">
-                {siteConfig.name}
-              </span>
-            </Link>
+            <Logo href="/" />
             <div className="flex items-center gap-4">
               <ToggleTheme />
               <Sheet open={open} onOpenChange={setOpen}>
@@ -102,20 +75,7 @@ export function Navbar() {
                 <SheetContent className="z-[99] w-11/12 overflow-y-auto">
                   <SheetHeader>
                     <SheetTitle>
-                      <Link href="/" className="flex items-center gap-2">
-                        <Image
-                          src={siteConfig.logo}
-                          width={512}
-                          height={512}
-                          className="h-8 w-8 select-none"
-                          draggable={false}
-                          onContextMenu={(e) => e.preventDefault()}
-                          alt={siteConfig.name}
-                        />
-                        <span className="text-lg font-semibold tracking-tighter">
-                          {siteConfig.name}
-                        </span>
-                      </Link>
+                      <Logo href="/" />
                     </SheetTitle>
                   </SheetHeader>
                   <div className="flex flex-col gap-6 p-4">

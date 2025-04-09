@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import ImageView from "next/image"
 import { MAX_FILE_SIZE, SUPPORTED_TYPES } from "@/utils"
 import { Loader2, X } from "lucide-react"
 
@@ -12,7 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Hero } from "@/components/hero"
+import { Banner } from "@/components/banner"
+import { CustomImage } from "@/components/custom-image"
 import { notifyError } from "@/components/toast"
 
 interface TState {
@@ -133,7 +133,7 @@ export function Converter() {
 
   return (
     <div className="space-y-4 pb-2 md:space-y-8">
-      <Hero
+      <Banner
         title="Favicon Converter / Generate from Image"
         description="Quickly generate your favicon from an image by uploading your image below. Download your favicon in the most up to date formats."
       />
@@ -160,14 +160,12 @@ export function Converter() {
               >
                 {preview ? (
                   <div className="relative flex min-h-60 flex-col items-center justify-center gap-4 py-6">
-                    <ImageView
+                    <CustomImage
                       src={preview}
                       width={180}
                       height={180}
                       alt="Preview"
-                      draggable={false}
-                      onContextMenu={(e) => e.preventDefault()}
-                      className="mx-auto max-h-64 rounded-md border object-contain select-none"
+                      className="mx-auto max-h-64 rounded-md border object-contain"
                     />
                     <p className="text-muted-foreground text-sm text-balance">
                       {file?.name} ({Math.round((file?.size || 0) / 1024)} KB)
