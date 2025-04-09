@@ -43,7 +43,7 @@ function ColorPicker({
           </span>
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className="z-40 w-auto p-0">
         <HexColorPicker
           color={value}
           onChange={(newColor) => {

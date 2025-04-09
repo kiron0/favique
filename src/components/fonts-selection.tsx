@@ -143,11 +143,7 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
                 </CommandItem>
               ))}
               {loadedCount < filteredFonts.length && (
-                <div
-                  ref={sentinelRef}
-                  key={`sentinel-${loadedCount}`}
-                  className="h-1 w-full"
-                />
+                <div ref={sentinelRef} key={`sentinel-${loadedCount}`} />
               )}
             </CommandGroup>
           </CommandList>

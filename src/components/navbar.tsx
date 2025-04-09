@@ -99,7 +99,7 @@ export function Navbar() {
                     <Menu className="size-4" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent className="z-[56] w-11/12 overflow-y-auto">
+                <SheetContent className="z-[99] w-11/12 overflow-y-auto">
                   <SheetHeader>
                     <SheetTitle>
                       <Link href="/" className="flex items-center gap-2">

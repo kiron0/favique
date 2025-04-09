@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { roundnessOptions } from "@/utils"
 import { Loader2 } from "lucide-react"
 
 import { useFaviconGenerator } from "@/hooks/use-favicon-generator"
@@ -70,7 +69,10 @@ export function Generator() {
               </div>
             </div>
             <div className="flex w-full items-center justify-end gap-4">
-              <Button disabled={loading}>
+              <Button
+                disabled={loading}
+                onClick={() => generateFaviconPack(canvasRef.current)}
+              >
                 {loading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -114,30 +116,22 @@ export function Generator() {
                     />
                     <FormField
                       control={form.control}
-                      name="shape"
+                      name="cornerRadius"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Background Roundness</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select roundness" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {roundnessOptions.map((option) => (
-                                <SelectItem
-                                  key={option.value}
-                                  value={option.value}
-                                >
-                                  {option.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <FormLabel>
+                            Background Roundness: {field.value}px
+                          </FormLabel>
+                          <FormControl>
+                            <Slider
+                              max={100}
+                              step={1}
+                              value={[field.value]}
+                              onValueChange={(value) => {
+                                field.onChange(value[0])
+                              }}
+                            />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -240,18 +234,6 @@ export function Generator() {
                       )}
                     />
                   </div>
-                  {img && (
-                    <Button type="submit" disabled={loading}>
-                      {loading ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          Downloading...
-                        </>
-                      ) : (
-                        "Download"
-                      )}
-                    </Button>
-                  )}
                 </form>
               </Form>
             </CardContent>

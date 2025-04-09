@@ -15,7 +15,7 @@ import { notifyError } from "@/components/toast"
 
 import Fonts from "../../public/fonts.json"
 
-const DEFAULT_VALUES: TextIconGeneratorOptions = {
+const DEFAULT_VALUES: TextIconFormSchema = {
   text: "F",
   fontFamily: "Leckerli One",
   fontStyle: "normal",
@@ -23,7 +23,7 @@ const DEFAULT_VALUES: TextIconGeneratorOptions = {
   backgroundColor: "#209CEE",
   fontSize: 110,
   fontWeight: "Regular 400 Normal",
-  shape: "rounded",
+  cornerRadius: 15,
 }
 
 export function useFaviconGenerator(
@@ -161,7 +161,7 @@ export function useFaviconGenerator(
       backgroundColor: data.backgroundColor,
       fontSize: data.fontSize,
       fontWeight: weight,
-      shape: data.shape as "square" | "circle" | "rounded",
+      cornerRadius: data.cornerRadius,
     }
 
     const generator = new TextIconGenerator(canvasRef.current)

@@ -12,15 +12,6 @@ export const textIconFormSchema = z.object({
     message: "Font size must be between 16 and 512",
   }),
   fontWeight: z.string().min(1, { message: "Font weight is required" }),
-  shape: z.nativeEnum(
-    {
-      square: "square",
-      circle: "circle",
-      rounded: "rounded",
-    },
-    {
-      errorMap: () => ({ message: "Shape is required" }),
-    }
-  ),
+  cornerRadius: z.number().min(0, { message: "Corner radius is required" }),
 })
 export type TextIconFormSchema = z.infer<typeof textIconFormSchema>
