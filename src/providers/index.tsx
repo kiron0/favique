@@ -12,7 +12,11 @@ export function Providers({
   children: React.ReactNode
 }>) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="light">
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="light"
+      disableTransitionOnChange
+    >
       <Navbar />
       <main className="flex min-h-svh w-full flex-col overflow-auto">
         {children}
