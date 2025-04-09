@@ -17,9 +17,7 @@ import Fonts from "../../public/fonts.json"
 
 const DEFAULT_VALUES: TextIconGeneratorOptions = {
   text: "F",
-  width: 512,
-  height: 512,
-  fontFamily: "JetBrains Mono",
+  fontFamily: "Leckerli One",
   fontStyle: "normal",
   fontColor: "#ffffff",
   backgroundColor: "#209CEE",

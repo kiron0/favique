@@ -4,6 +4,7 @@ import * as React from "react"
 import { roundnessOptions } from "@/utils"
 import { Loader2 } from "lucide-react"
 
+import { useFavicon } from "@/hooks/use-favicon"
 import { useFaviconGenerator } from "@/hooks/use-favicon-generator"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -33,6 +34,12 @@ export function Generator() {
 
   const { img, loading, form, fontVariants, generateFaviconPack } =
     useFaviconGenerator(canvasRef)
+
+  try {
+    useFavicon(img)
+  } catch (error) {
+    console.error("Error setting favicon:", error)
+  }
 
   return (
     <div className="space-y-4 md:space-y-8">
@@ -162,7 +169,7 @@ export function Generator() {
                           <FormLabel>Font Size: {field.value}px</FormLabel>
                           <FormControl>
                             <Slider
-                              max={170}
+                              max={512}
                               min={16}
                               step={1}
                               value={[field.value]}

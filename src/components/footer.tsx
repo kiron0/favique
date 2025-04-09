@@ -1,14 +1,12 @@
 "use client"
 
-import { menuItems } from "@/utils"
+import { siteConfig } from "@/config"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { notifyError, notifySuccess } from "@/components/toast"
 
 export function Footer() {
-  const { logo } = menuItems
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -39,20 +37,15 @@ export function Footer() {
   }
 
   return (
-    <footer className="space-y-10 pt-16 pb-10 md:pt-20">
-      <div className="border-input/50 border-b" />
+    <footer className="bg-secondary mt-16 space-y-10 pb-10 md:mt-20">
+      <div className="border-input border-b" />
       <div className="mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-10 px-4 text-center lg:flex-row lg:text-left xl:px-0">
         <div className="flex w-full shrink flex-col items-center justify-between gap-6 lg:max-w-96 lg:items-start">
           <div className="flex items-center gap-2 lg:justify-start">
-            <img
-              src={logo.src}
-              alt={logo.alt}
-              title={logo.title}
-              className="h-8"
-            />
-            <h2 className="text-xl font-semibold">{logo.title}</h2>
+            <img src={siteConfig.logo} alt={siteConfig.name} className="h-8" />
+            <h2 className="text-xl font-semibold">{siteConfig.name}</h2>
           </div>
-          <p className="text-muted-foreground text-sm">{logo.description}</p>
+          <p className="text-muted-foreground text-sm">{siteConfig.slogan}</p>
         </div>
         <div className="mx-auto w-full space-y-2 sm:w-fit lg:mx-0">
           <div className="text-base font-semibold">Stay up to date</div>
@@ -67,7 +60,7 @@ export function Footer() {
               id="email"
               name="email"
               placeholder="Enter your email"
-              className="lg:min-w-72"
+              className="w-72"
             />
             <Button type="submit">Subscribe</Button>
           </form>
@@ -76,7 +69,7 @@ export function Footer() {
       <div className="mx-auto w-full max-w-7xl space-y-2 px-4 text-center lg:px-0">
         <h2 className="text-lg font-semibold">Built with</h2>
         <div className="text-muted-foreground text-sm">
-          {logo.title} is built with{" "}
+          {siteConfig.name} is built with{" "}
           <a
             href="https://www.npmjs.com/package/favium"
             target="_blank"
@@ -89,7 +82,8 @@ export function Footer() {
       </div>
       <div className="text-muted-foreground mx-auto flex w-full max-w-7xl flex-col-reverse justify-between gap-4 px-4 text-center text-sm font-medium md:flex-col lg:flex-row lg:items-center lg:text-left xl:px-0">
         <p>
-          &copy; {new Date().getFullYear()} {logo.title}. All rights reserved.
+          &copy; {new Date().getFullYear()} {siteConfig.name}. All rights
+          reserved.
         </p>
         <ul className="flex justify-center gap-4 lg:justify-start">
           <li className="text-primary underline hover:no-underline">

@@ -1,8 +1,10 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { siteConfig } from "@/config"
 import { MenuItem, menuItems } from "@/utils"
 import { Menu } from "lucide-react"
 
@@ -19,23 +21,29 @@ import {
 export function Navbar() {
   const [open, setOpen] = React.useState(false)
 
-  const { logo, menu, extra } = menuItems
-
   return (
-    <div className="bg-background sticky top-0 z-[99] mx-auto w-full border-b">
+    <div className="bg-background sticky top-0 z-50 mx-auto w-full border-b">
       <div className="mx-auto w-full max-w-7xl p-4 xl:px-0">
         <nav className="hidden justify-between lg:flex">
           <div className="flex items-center gap-6">
-            <Link href={logo.url} className="flex items-center gap-2">
-              <img src={logo.src} className="max-h-8" alt={logo.alt} />
+            <Link href="/" className="flex items-center gap-2">
+              <Image
+                src={siteConfig.logo}
+                width={512}
+                height={512}
+                className="h-8 w-8 select-none"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
+                alt={siteConfig.name}
+              />
               <span className="text-lg font-semibold tracking-tighter">
-                {logo.title}
+                {siteConfig.name}
               </span>
             </Link>
             <div className="flex items-center">
               <div className="relative flex max-w-max flex-1 items-center justify-center">
                 <div className="group flex flex-1 list-none items-center justify-center gap-1">
-                  {menu.map((item) =>
+                  {menuItems.map((item) =>
                     renderMenuItem({
                       item,
                       setOpen,
@@ -46,26 +54,38 @@ export function Navbar() {
             </div>
           </div>
           <div className="flex gap-2">
-            <Link
-              href={extra.author.url}
+            <a
+              href={siteConfig.links.portfolio}
+              target="_blank"
+              rel="noopener noreferrer"
               className={buttonVariants({ variant: "outline", size: "sm" })}
             >
-              {extra.author.title}
-            </Link>
-            <Link
-              href={extra.coffee.url}
+              Author
+            </a>
+            <a
+              href="https://buymeacoffee.com/_thk"
+              target="_blank"
+              rel="noopener noreferrer"
               className={buttonVariants({ size: "sm" })}
             >
-              {extra.coffee.title}
-            </Link>
+              Buy me a coffee
+            </a>
           </div>
         </nav>
         <div className="lg:hidden">
           <div className="flex items-center justify-between">
-            <Link href={logo.url} className="flex items-center gap-2">
-              <img src={logo.src} className="max-h-8" alt={logo.alt} />
+            <Link href="/" className="flex items-center gap-2">
+              <Image
+                src={siteConfig.logo}
+                width={512}
+                height={512}
+                className="h-8 w-8 select-none"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
+                alt={siteConfig.name}
+              />
               <span className="text-lg font-semibold tracking-tighter">
-                {logo.title}
+                {siteConfig.name}
               </span>
             </Link>
             <Sheet open={open} onOpenChange={setOpen}>
@@ -74,13 +94,21 @@ export function Navbar() {
                   <Menu className="size-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent className="w-11/12 overflow-y-auto">
+              <SheetContent className="z-[56] w-11/12 overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle>
-                    <Link href={logo.url} className="flex items-center gap-2">
-                      <img src={logo.src} className="max-h-8" alt={logo.alt} />
+                    <Link href="/" className="flex items-center gap-2">
+                      <Image
+                        src={siteConfig.logo}
+                        width={512}
+                        height={512}
+                        className="h-8 w-8 select-none"
+                        draggable={false}
+                        onContextMenu={(e) => e.preventDefault()}
+                        alt={siteConfig.name}
+                      />
                       <span className="text-lg font-semibold tracking-tighter">
-                        {logo.title}
+                        {siteConfig.name}
                       </span>
                     </Link>
                   </SheetTitle>
@@ -91,7 +119,7 @@ export function Navbar() {
                     className="group/navigation-menu relative flex max-w-max flex-1 items-center justify-center"
                   >
                     <div className="group flex flex-1 list-none flex-col items-start justify-center gap-2">
-                      {menu.map((item) =>
+                      {menuItems.map((item) =>
                         renderMenuItem({
                           item,
                           setOpen,
@@ -101,22 +129,22 @@ export function Navbar() {
                   </div>
                   <div className="flex flex-col gap-3">
                     <a
-                      href={extra.author.url}
+                      href={siteConfig.links.portfolio}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setOpen(false)}
                       className={buttonVariants({ variant: "outline" })}
                     >
-                      {extra.author.title}
+                      Author
                     </a>
                     <a
-                      href={extra.coffee.url}
+                      href="https://buymeacoffee.com/_thk"
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setOpen(false)}
                       className={buttonVariants()}
                     >
-                      {extra.coffee.title}
+                      Buy me a coffee
                     </a>
                   </div>
                 </div>

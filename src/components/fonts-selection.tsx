@@ -37,7 +37,7 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
   const [loadedCount, setLoadedCount] = React.useState(PAGE_SIZE)
   const [searchQuery, setSearchQuery] = React.useState("")
   const [debouncedQuery] = useDebounce(searchQuery, 300)
-  const sentinelRef = React.useRef<HTMLDivElement>(null)
+  const sentinelRef = React.useRef<HTMLDivElement | null>(null)
 
   const filteredFonts = React.useMemo(() => {
     if (!debouncedQuery) return ALL_FONTS
@@ -67,7 +67,7 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
       },
       {
         root: null,
-        rootMargin: "0px",
+        rootMargin: "100px",
         threshold: 0.1,
       }
     )
@@ -83,7 +83,7 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
       }
       observer.disconnect()
     }
-  }, [loadMore, filteredFonts.length, loadedCount, sentinelRef])
+  }, [loadMore, filteredFonts.length, loadedCount])
 
   return (
     <Popover
@@ -114,7 +114,7 @@ export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
+        className="border-input !z-10 w-full min-w-[var(--radix-popper-anchor-width)] p-0"
         align="start"
       >
         <Command shouldFilter={false}>
