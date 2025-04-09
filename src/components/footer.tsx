@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import { siteConfig } from "@/config"
 
 import { Button } from "@/components/ui/button"
@@ -7,11 +8,10 @@ import { Input } from "@/components/ui/input"
 import { notifyError, notifySuccess } from "@/components/toast"
 
 export function Footer() {
+  const [email, setEmail] = React.useState<string>("")
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get("email") as string
 
     if (!email) {
       return notifyError({
@@ -33,7 +33,7 @@ export function Footer() {
       description: `You have successfully subscribed with ${email}`,
     })
 
-    e.currentTarget.reset()
+    setEmail("")
   }
 
   return (
@@ -58,11 +58,14 @@ export function Footer() {
             </label>
             <Input
               id="email"
-              name="email"
               placeholder="Enter your email"
               className="w-72"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <Button type="submit">Subscribe</Button>
+            <Button type="submit" disabled={!email}>
+              Subscribe
+            </Button>
           </form>
         </div>
       </div>
