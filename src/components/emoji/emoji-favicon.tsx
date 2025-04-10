@@ -32,7 +32,7 @@ export function EmojiFavicon({ emoji }: EmojiFaviconProps) {
       })
     }
 
-    const imageUrl = getEmojiUrl(emoji, "png")
+    const imageUrl = getEmojiUrl(emoji)
     const img = await imgToFile(imageUrl)
 
     if (!img) {

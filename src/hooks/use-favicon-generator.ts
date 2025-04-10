@@ -91,12 +91,21 @@ export function useFaviconGenerator(
     if (image) {
       const img = await loadImage(image)
 
-      canvas.width = img.width
-      canvas.height = img.height
+      const targetSize = 512
+      const scale = Math.min(targetSize / img.width, targetSize / img.height)
+
+      canvas.width = targetSize
+      canvas.height = targetSize
 
       const ctx = canvas.getContext("2d")
       if (!ctx) throw new Error("Failed to get canvas context")
-      ctx.drawImage(img, 0, 0)
+
+      const scaledWidth = img.width * scale
+      const scaledHeight = img.height * scale
+      const offsetX = (canvas.width - scaledWidth) / 2
+      const offsetY = (canvas.height - scaledHeight) / 2
+
+      ctx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight)
     }
 
     const favicon = new FaviconComposer(canvas)
