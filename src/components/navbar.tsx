@@ -1,11 +1,11 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { siteConfig } from "@/config"
 import { MenuItem, menuItems } from "@/utils"
 import { Menu } from "lucide-react"
+import { useRouter } from "nextjs-toploader/app"
 
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -130,23 +130,31 @@ const renderMenuItem = ({
   item: MenuItem
   setOpen: (open: boolean) => void
 }) => {
+  const router = useRouter()
   const pathname = usePathname()
   const isActive = (url: string) => {
     return pathname === url
   }
 
+  const handleClick = (href: string) => {
+    if (href === pathname) {
+      return setOpen(false)
+    }
+    setOpen(false)
+    router.push(href)
+  }
+
   return (
     <div key={item.title} className="relative">
-      <Link
-        onClick={() => setOpen(false)}
-        href={item.url}
+      <button
+        onClick={() => handleClick(item.url)}
         className={cn(
-          "hover:bg-muted/80 hover:text-accent-foreground inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors",
+          "hover:bg-muted/80 hover:text-accent-foreground inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors",
           isActive(item.url) ? "underline decoration-2 underline-offset-6" : ""
         )}
       >
         {item.title}
-      </Link>
+      </button>
     </div>
   )
 }

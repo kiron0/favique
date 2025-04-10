@@ -3,12 +3,25 @@
 import Link from "next/link"
 import EmojiImg from "@/assets/emoji.png"
 import ConverterImg from "@/assets/image.png"
+import LogosImg from "@/assets/logos.png"
 import GeneratorImg from "@/assets/text.png"
 
 import { Banner } from "@/components/banner"
 import { CustomImage } from "@/components/custom-image"
 
-const menuItems = [
+interface MenuItem {
+  name: string
+  path: string
+  img: {
+    src: string
+    width?: number
+    height?: number
+    blurDataURL?: string
+  }
+  description: string
+}
+
+const menuItems: MenuItem[] = [
   {
     name: "Image",
     path: "/converter",
@@ -29,6 +42,13 @@ const menuItems = [
     img: EmojiImg,
     description:
       "Want to use an emoji for your favicon? Choose from a list of hundreds of emojis to generate a favicon for your website.",
+  },
+  {
+    name: "Logos",
+    path: "/logos",
+    img: LogosImg,
+    description:
+      "Don't have a logo or image for your website and want to generate a favicon from scratch then use this tool to generate your favicon.",
   },
 ]
 
