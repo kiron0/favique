@@ -55,22 +55,22 @@ export function Generator() {
               <div className="flex w-full items-center gap-3">
                 <CustomImage
                   src={img}
-                  width={128}
-                  height={128}
+                  width={512}
+                  height={512}
                   alt="Generated Favicon"
                   className="h-auto w-12"
                 />
                 <CustomImage
                   src={img}
-                  width={128}
-                  height={128}
+                  width={512}
+                  height={512}
                   alt="Generated Favicon"
                   className="h-auto w-8"
                 />
                 <CustomImage
                   src={img}
-                  width={128}
-                  height={128}
+                  width={512}
+                  height={512}
                   alt="Generated Favicon"
                   className="h-auto w-4"
                 />

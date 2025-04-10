@@ -2,6 +2,8 @@ import { z } from "zod"
 
 export const textIconFormSchema = z.object({
   text: z.string().min(1, { message: "Logo text is required" }),
+  width: z.number().min(0, { message: "Width is required" }),
+  height: z.number().min(0, { message: "Height is required" }),
   fontColor: z.string().min(1, { message: "Font color is required" }),
   backgroundColor: z
     .string()

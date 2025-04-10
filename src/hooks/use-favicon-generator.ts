@@ -17,6 +17,8 @@ import Fonts from "../../public/fonts.json"
 
 const DEFAULT_VALUES: TextIconFormSchema = {
   text: "F",
+  width: 512,
+  height: 512,
   fontFamily: "Leckerli One",
   fontStyle: "normal",
   fontColor: "#ffffff",
@@ -42,6 +44,7 @@ export function useFaviconGenerator(
   }) as UseFormReturn<TextIconFormSchema>
 
   const selectedFontFamily = form.watch("fontFamily")
+  const fontWeight = form.watch("fontWeight")
 
   const fontVariants = React.useMemo(
     () =>
@@ -110,6 +113,18 @@ export function useFaviconGenerator(
       const offsetY = (canvas.height - scaledHeight) / 2
 
       ctx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight)
+    } else {
+      const selectedFontWeight = fontVariants.find((v) => v.name === fontWeight)
+
+      const fontInfo = Fonts.find((font) => font.family === selectedFontFamily)
+      const fontAuthor = "Unknown"
+      const fontSource =
+        fontInfo?.variants?.find((v) => v.name === selectedFontWeight?.name)
+          ?.url || "Unknown"
+      const fontLicense = "Unknown"
+      const fontTitle = fontInfo?.family || "Unknown"
+      const fontText = `This favicon was generated using the following font:\n\n- Font Title: ${fontTitle}\n- Font Author: ${fontAuthor}\n- Font Source: ${fontSource}\n- Font License: ${fontLicense}`
+      zip.file("about.txt", fontText)
     }
 
     const favicon = new FaviconComposer(canvas)
@@ -136,6 +151,10 @@ export function useFaviconGenerator(
     })
     zip.file("site.webmanifest", JSON.stringify(manifestJson, null, 2))
 
+    const readmeText = `# Favicon Pack\n\nThis is a favicon pack generated using Favium.\n\n## How to use\n\n1. Unzip the package.\n2. Upload the favicon files to your website.\n3. Update your HTML to link to the new favicons.\n`
+
+    zip.file("README.txt", readmeText)
+
     const zipBlob = await zip.generateAsync({ type: "blob" })
     saveAs(zipBlob, `favicon-pack-${manifest?.short_name || Date.now()}.zip`)
   }
@@ -144,6 +163,7 @@ export function useFaviconGenerator(
     if (typeof window === "undefined" || !canvasRef.current) return
 
     const data = form.getValues()
+
     const selectedFont = fontVariants.find((v) => v.name === data.fontWeight)
 
     if (!selectedFont) {
@@ -167,22 +187,17 @@ export function useFaviconGenerator(
     })
 
     const payload: TextIconGeneratorOptions = {
-      text: data.text,
-      fontFamily: data.fontFamily,
+      ...data,
       fontStyle: style.toLowerCase() as "normal" | "italic",
-      fontColor: data.fontColor,
-      backgroundColor: data.backgroundColor,
-      fontSize: data.fontSize,
+      fontSize: data.fontSize * 4,
       fontWeight: weight,
-      cornerRadius: data.cornerRadius,
+      cornerRadius: data.cornerRadius * 4,
     }
 
     const generator = new TextIconGenerator(canvasRef.current)
-    generator.generate(payload)
-
-    const composer = new FaviconComposer(canvasRef.current)
-    const dataUrl = composer.png(512)
-    setImg(dataUrl)
+    const textIcon = generator.generate(payload)
+    const url = textIcon.toDataURL()
+    setImg(url)
   }, [form, fontVariants])
 
   React.useEffect(() => {
