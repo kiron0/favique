@@ -81,12 +81,13 @@ export function Converter() {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
     handleFile(e.target.files?.[0] as File)
   }
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
-    handleFile(e.dataTransfer.files[0])
+    handleFile(e.dataTransfer.files?.[0] as File)
   }
 
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {

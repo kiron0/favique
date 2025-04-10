@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react"
 import { useFaviconGenerator } from "@/hooks/use-favicon-generator"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
   FormControl,
@@ -15,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -29,6 +31,11 @@ import { CustomImage } from "@/components/custom-image"
 import { FontsSelection } from "@/components/fonts-selection"
 
 export function Generator() {
+  const [wantToAddSiteName, setWantToAddSiteName] = React.useState(false)
+  const [manifest, setManifest] = React.useState({
+    name: "",
+    short_name: "",
+  })
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
 
   const { img, loading, form, fontVariants, generateFaviconPack } =
@@ -72,7 +79,7 @@ export function Generator() {
             <div className="flex w-full items-center justify-end gap-4">
               <Button
                 disabled={loading}
-                onClick={() => generateFaviconPack(canvasRef.current)}
+                onClick={() => generateFaviconPack(canvasRef.current, manifest)}
               >
                 {loading ? (
                   <>
@@ -101,7 +108,7 @@ export function Generator() {
                   )}
                   className="space-y-8"
                 >
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <FormField
                       control={form.control}
                       name="text"
@@ -234,6 +241,64 @@ export function Generator() {
                         </FormItem>
                       )}
                     />
+                    <div className="col-span-full space-y-6">
+                      <div className="items-top flex space-x-2">
+                        <Checkbox
+                          id="want-to-add-site-name-generator"
+                          checked={wantToAddSiteName}
+                          onCheckedChange={(value) =>
+                            setWantToAddSiteName(value as boolean)
+                          }
+                        />
+                        <div className="grid gap-1.5 leading-none">
+                          <Label
+                            htmlFor="want-to-add-site-name-generator"
+                            className="cursor-pointer"
+                          >
+                            Add site name and short name to manifest
+                          </Label>
+                          <p className="text-muted-foreground text-xs">
+                            This will add the site name and short name to the
+                            web manifest file. If you don't want to add it,
+                            leave it unchecked.
+                          </p>
+                        </div>
+                      </div>
+                      {wantToAddSiteName && (
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="site-name">Site Name</Label>
+                            <Input
+                              type="text"
+                              placeholder="Enter your site name"
+                              value={manifest.name}
+                              onChange={(e) =>
+                                setManifest({
+                                  ...manifest,
+                                  name: e.target.value,
+                                })
+                              }
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="site-short-name">
+                              Site Short Name
+                            </Label>
+                            <Input
+                              type="text"
+                              placeholder="Enter your site short name"
+                              value={manifest.short_name}
+                              onChange={(e) =>
+                                setManifest({
+                                  ...manifest,
+                                  short_name: e.target.value,
+                                })
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </form>
               </Form>

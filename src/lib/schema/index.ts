@@ -13,5 +13,11 @@ export const textIconFormSchema = z.object({
   }),
   fontWeight: z.string().min(1, { message: "Font weight is required" }),
   cornerRadius: z.number().min(0, { message: "Corner radius is required" }),
+  manifest: z
+    .object({
+      name: z.string().min(1, { message: "Name is required" }),
+      short_name: z.string().min(1, { message: "Short name is required" }),
+    })
+    .optional(),
 })
 export type TextIconFormSchema = z.infer<typeof textIconFormSchema>

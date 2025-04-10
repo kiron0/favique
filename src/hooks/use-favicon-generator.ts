@@ -24,6 +24,10 @@ const DEFAULT_VALUES: TextIconFormSchema = {
   fontSize: 110,
   fontWeight: "Regular 400 Normal",
   cornerRadius: 15,
+  manifest: {
+    name: "",
+    short_name: "",
+  },
 }
 
 export function useFaviconGenerator(
