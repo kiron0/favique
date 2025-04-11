@@ -51,6 +51,7 @@ const DEFAULT_VALUES: LogoFormSchema = {
 
 export function Logos() {
   const [img, setImg] = React.useState<string | null>(null)
+  const [svg, setSvg] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(false)
 
   const form = useForm<LogoFormSchema>({
@@ -68,7 +69,16 @@ export function Logos() {
 
   const onSubmit = async (data: LogoFormSchema) => {
     const { fontWeight } = data
+
+    if (!img || !svg) {
+      return notifyError({
+        title: "Image not generated",
+        description: "Please generate the image before downloading.",
+      })
+    }
+
     try {
+      setLoading(true)
       const zip = new JSZip()
 
       const selectedFontWeight = fontVariants.find((v) => v.name === fontWeight)
@@ -84,10 +94,12 @@ export function Logos() {
       zip.file("about.txt", fontText)
 
       const imgName = "logo"
-      const imgFile = await fetch(img as string)
+
+      const imgFile = await fetch(img)
       const imgBlob = await imgFile.blob()
       zip.file(`${imgName}.png`, imgBlob)
-      zip.file(`${imgName}.svg`, imgBlob)
+
+      zip.file(`${imgName}.svg`, svg)
 
       const zipBlob = await zip.generateAsync({ type: "blob" })
       saveAs(zipBlob, `${siteConfig.name}-logo-${Date.now()}.zip`)
@@ -104,7 +116,6 @@ export function Logos() {
     const data = form.getValues()
 
     const selectedFont = fontVariants.find((v) => v.name === data.fontWeight)
-
     if (!selectedFont) {
       return notifyError({
         title: "Font weight not found",
@@ -114,6 +125,7 @@ export function Logos() {
     const [, weight, style] = selectedFont.name.split(" ")
 
     const canvas = document.createElement("canvas")
+
     if (!canvas) {
       return notifyError({
         title: "Canvas not found",
@@ -140,7 +152,6 @@ export function Logos() {
     })
 
     const paddingBetween = 20
-
     const { fontSize, logoRadius } = calculateSizes(
       ctx,
       data,
@@ -183,9 +194,57 @@ export function Logos() {
     ctx.textAlign = "left"
     ctx.fillText(data.bannerText, bannerTextX, centerY)
 
-    const dataURL = canvas.toDataURL("image/svg+xml")
-    setImg(dataURL)
-    setLoading(false)
+    const pngDataURL = canvas.toDataURL("image/png")
+    setImg(pngDataURL)
+
+    const svg = `
+      <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background -->
+        <rect x="0" y="0" width="${width}" height="${height}" fill="${data.bannerBackgroundColor}" />
+
+        <!-- Logo (Rounded Rectangle) -->
+        <rect
+          x="${logoX - logoRadius}"
+          y="${centerY - logoRadius}"
+          width="${logoWidth}"
+          height="${logoWidth}"
+          rx="${cornerRadius}"
+          ry="${cornerRadius}"
+          fill="${data.logoBackgroundColor}"
+        />
+
+        <!-- Logo Text -->
+        <text
+          x="${logoX}"
+          y="${centerY}"
+          fill="${data.logoColor}"
+          font-family="${data.fontFamily}"
+          font-size="${fontSize}"
+          font-style="${style}"
+          font-weight="${weight}"
+          text-anchor="middle"
+          dominant-baseline="middle"
+        >
+          ${data.logoText}
+        </text>
+
+        <!-- Banner Text -->
+        <text
+          x="${bannerTextX}"
+          y="${centerY}"
+          fill="${data.bannerColor}"
+          font-family="${data.fontFamily}"
+          font-size="${fontSize}"
+          font-style="${style}"
+          font-weight="${weight}"
+          text-anchor="start"
+          dominant-baseline="middle"
+        >
+          ${data.bannerText}
+        </text>
+      </svg>
+    `
+    setSvg(svg)
   }, [form, fontVariants])
 
   React.useEffect(() => {
@@ -385,8 +444,8 @@ export function Logos() {
                           className="h-full w-full object-contain"
                           width={1000}
                           height={600}
-                          onError={() => setImg(null)}
-                          onLoad={() => setLoading(false)}
+                          placeholder="blur"
+                          blurDataURL={img}
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center rounded-md border">
