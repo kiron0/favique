@@ -19,27 +19,9 @@ class CanvasToSVG {
     const svgHeight = canvasHeight / dpr
     const dataURL = this.canvas.toDataURL("image/png", 1.0)
 
-    const svg = `
-                              <svg
-                                        width="${svgWidth}"
-                                        height="${svgHeight}"
-                                        viewBox="0 0 ${svgWidth} ${svgHeight}"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        preserveAspectRatio="xMidYMid meet"
-                              >
-                                        <rect width="100%" height="100%" fill="white" />
-                                        <image
-                                                  xlink:href="${dataURL}"
-                                                  href="${dataURL}"
-                                                  x="0"
-                                                  y="0"
-                                                  width="${svgWidth}"
-                                                  height="${svgHeight}"
-                                                  preserveAspectRatio="xMidYMid meet"
-                                        />
-                              </svg>
-                    `.trim()
+    const svg =
+      `<svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet">
+    <image xlink:href="${dataURL}" href="${dataURL}" width="${svgWidth}" height="${svgHeight}" preserveAspectRatio="xMidYMid meet" /></svg>`.trim()
 
     return svg
   }
