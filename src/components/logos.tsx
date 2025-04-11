@@ -41,7 +41,7 @@ import Fonts from "../../public/fonts.json"
 const DEFAULT_VALUES: LogoFormSchema = {
   logoText: "F",
   logoColor: "#FFE8F5",
-  bannerText: "Favique",
+  bannerText: "Favique.com",
   bannerColor: "#8000FF",
   logoBackgroundColor: "#8000FF",
   bannerBackgroundColor: "#FFE8F5",
@@ -51,9 +51,14 @@ const DEFAULT_VALUES: LogoFormSchema = {
 }
 
 export function Logos() {
-  const [svg, setSvg] = React.useState<string | null>(null)
+  const [files, setFiles] = React.useState<{
+    img: string | null
+    svg: string | null
+  }>({
+    img: null,
+    svg: null,
+  })
   const [loading, setLoading] = React.useState(false)
-  const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
 
   const form = useForm<LogoFormSchema>({
     resolver: zodResolver(logoFormSchema),
@@ -71,16 +76,7 @@ export function Logos() {
   const onSubmit = async (data: LogoFormSchema) => {
     const { fontWeight } = data
 
-    const canvas = canvasRef.current
-
-    if (!canvas) {
-      return notifyError({
-        title: "Canvas not found",
-        description: "Please try again later.",
-      })
-    }
-
-    if (!svg) {
+    if (!files.img || !files.svg) {
       return notifyError({
         title: "Image not generated",
         description: "Please generate the image before downloading.",
@@ -105,13 +101,11 @@ export function Logos() {
 
       const imgName = "logo"
 
-      const img = canvas.toDataURL("image/png")
-
-      const imgBlob = await fetch(img).then((res) => res.blob())
+      const imgBlob = await fetch(files.img).then((res) => res.blob())
 
       zip.file(`${imgName}.png`, imgBlob)
 
-      zip.file(`${imgName}.svg`, svg)
+      zip.file(`${imgName}.svg`, files.svg)
 
       const zipBlob = await zip.generateAsync({ type: "blob" })
       saveAs(zipBlob, `${siteConfig.name}-logo-${Date.now()}.zip`)
@@ -202,8 +196,11 @@ export function Logos() {
     ctx.fillText(data.bannerText, bannerTextX, centerY)
 
     const exporter = new CanvasToSVG(canvas)
-    const svgData = exporter.toSVG()
-    setSvg(svgData)
+    const svgData = exporter.toSVGWithFullScreen()
+    setFiles({
+      img: canvas.toDataURL("image/png"),
+      svg: svgData,
+    })
   }, [form, fontVariants])
 
   React.useEffect(() => {
@@ -396,9 +393,9 @@ export function Logos() {
                   </div>
                   <div className="order-1 col-span-1 space-y-6 lg:order-2 lg:col-span-2">
                     <div className="flex w-full items-center justify-center overflow-hidden rounded-md border">
-                      {svg ? (
+                      {files.svg ? (
                         <CustomImage
-                          src={`data:image/svg+xml;base64,${btoa(svg)}`}
+                          src={`data:image/svg+xml;base64,${btoa(files.svg)}`}
                           alt="Generated Logo"
                           className="h-full w-full object-contain"
                           width={1000}
