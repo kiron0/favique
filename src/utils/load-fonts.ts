@@ -14,7 +14,7 @@ export async function loadFonts(options: FontLoaderOptions): Promise<boolean> {
         console.error(`Font loading failed for: ${options.families.join(", ")}`)
         resolve(false)
       },
-      timeout: options.timeout || 2000,
+      timeout: options.timeout || 500,
     })
   })
 }

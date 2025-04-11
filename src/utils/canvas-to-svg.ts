@@ -1,6 +1,5 @@
 class CanvasToSVG {
   private canvas: HTMLCanvasElement
-  private context: CanvasRenderingContext2D
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
@@ -8,7 +7,6 @@ class CanvasToSVG {
     if (!context) {
       throw new Error("Unable to get 2D rendering context")
     }
-    this.context = context
   }
 
   toSVG() {
