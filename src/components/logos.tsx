@@ -7,7 +7,7 @@ import CanvasToSVG from "@/utils/canvas-to-svg"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { saveAs } from "file-saver"
 import JSZip from "jszip"
-import { Loader2 } from "lucide-react"
+import { Loader2, Shuffle } from "lucide-react"
 import { useForm, UseFormReturn } from "react-hook-form"
 
 import { logoFormSchema, LogoFormSchema } from "@/lib/schema"
@@ -122,12 +122,9 @@ export function Logos() {
     const data = form.getValues()
 
     const selectedFont = fontVariants.find((v) => v.name === data.fontWeight)
-    if (!selectedFont) {
-      return notifyError({
-        title: "Font weight not found",
-        description: "Please select a valid font weight.",
-      })
-    }
+
+    if (!selectedFont) return
+
     const [, weight, style] = selectedFont.name.split(" ")
 
     const canvas = document.createElement("canvas")
@@ -202,6 +199,41 @@ export function Logos() {
       svg: svgData,
     })
   }, [form, fontVariants])
+
+  const generateRandomLogo = React.useCallback(() => {
+    if (!Fonts || loading) return DEFAULT_VALUES
+
+    const randomLogo = {
+      ...DEFAULT_VALUES,
+      logoColor:
+        Math.random() < 0.8
+          ? "#FFFFFF"
+          : `#${Math.floor(Math.random() * 16777215)
+              .toString(16)
+              .padStart(6, "0")}`,
+      bannerColor:
+        Math.random() < 0.8
+          ? "#FFFFFF"
+          : `#${Math.floor(Math.random() * 16777215)
+              .toString(16)
+              .padStart(6, "0")}`,
+      logoBackgroundColor: `#${Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, "0")}`,
+      bannerBackgroundColor: `#${Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, "0")}`,
+      logoRoundness: Math.floor(Math.random() * 101),
+      fontFamily:
+        Fonts[Math.floor(Math.random() * Fonts.length)].family ||
+        "Leckerli One",
+    }
+    return randomLogo
+  }, [])
+
+  React.useEffect(() => {
+    form.reset(generateRandomLogo())
+  }, [form, generateRandomLogo])
 
   React.useEffect(() => {
     if (typeof window !== "undefined") {
@@ -409,7 +441,16 @@ export function Logos() {
                         </div>
                       )}
                     </div>
-                    <div className="flex justify-end">
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        variant="outline"
+                        type="button"
+                        onClick={() => form.reset(generateRandomLogo())}
+                        disabled={loading || form.formState.isSubmitting}
+                      >
+                        <Shuffle className="h-4 w-4" />
+                        Randomize
+                      </Button>
                       <Button type="submit" disabled={loading}>
                         {loading ? (
                           <>
