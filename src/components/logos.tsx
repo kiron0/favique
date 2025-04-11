@@ -1,7 +1,11 @@
 "use client"
 
 import * as React from "react"
+import { siteConfig } from "@/config"
+import { calculateSizes, drawRoundedRect, loadFonts } from "@/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { saveAs } from "file-saver"
+import JSZip from "jszip"
 import { Loader2 } from "lucide-react"
 import { useForm, UseFormReturn } from "react-hook-form"
 
@@ -63,8 +67,31 @@ export function Logos() {
   )
 
   const onSubmit = async (data: LogoFormSchema) => {
+    const { fontWeight } = data
     try {
-      await updateCanvas()
+      const zip = new JSZip()
+
+      const selectedFontWeight = fontVariants.find((v) => v.name === fontWeight)
+
+      const fontInfo = Fonts.find((font) => font.family === selectedFontFamily)
+      const fontAuthor = "Unknown"
+      const fontSource =
+        fontInfo?.variants?.find((v) => v.name === selectedFontWeight?.name)
+          ?.url || "Unknown"
+      const fontLicense = "Unknown"
+      const fontTitle = fontInfo?.family || "Unknown"
+      const fontText = `This favicon was generated using the following font:\n\n- Font Title: ${fontTitle}\n- Font Author: ${fontAuthor}\n- Font Source: ${fontSource}\n- Font License: ${fontLicense}`
+      zip.file("about.txt", fontText)
+
+      const imgName = "logo"
+      const imgFile = await fetch(img as string)
+      const imgBlob = await imgFile.blob()
+      zip.file(`${imgName}.png`, imgBlob)
+      zip.file(`${imgName}.svg`, imgBlob)
+
+      const zipBlob = await zip.generateAsync({ type: "blob" })
+      saveAs(zipBlob, `${siteConfig.name}-logo-${Date.now()}.zip`)
+      setLoading(false)
     } catch (error) {
       return notifyError({
         title: "Error generating logo",
@@ -75,7 +102,9 @@ export function Logos() {
 
   const updateCanvas = React.useCallback(async () => {
     const data = form.getValues()
+
     const selectedFont = fontVariants.find((v) => v.name === data.fontWeight)
+
     if (!selectedFont) {
       return notifyError({
         title: "Font weight not found",
@@ -106,49 +135,37 @@ export function Logos() {
     ctx.fillStyle = data.bannerBackgroundColor
     ctx.fillRect(0, 0, width, height)
 
-    const WebFont = (await import("webfontloader")).default
-
-    await new Promise<void>((resolve) => {
-      WebFont.load({
-        google: { families: [data.fontFamily] },
-        active: () => resolve(),
-        inactive: () => {
-          console.error("Font loading failed")
-          resolve()
-        },
-      })
+    await loadFonts({
+      families: [data.fontFamily],
     })
 
-    const minPadding = 70
     const paddingBetween = 20
-    const maxRadius = height * 0.3
-    const minRadius = 20
-    const tempFontSize = 100
 
-    ctx.font = `${style} ${weight} ${tempFontSize}px ${data.fontFamily}`
-    const bannerTextWidthTemp = ctx.measureText(data.bannerText).width
-    const k = bannerTextWidthTemp / tempFontSize
-    const maxContentWidth = width - 2 * minPadding
-    const availableRadius = (maxContentWidth - paddingBetween) / (2 + k)
-    const circleRadius = Math.max(
-      minRadius,
-      Math.min(maxRadius, availableRadius)
+    const { fontSize, logoRadius } = calculateSizes(
+      ctx,
+      data,
+      width,
+      height,
+      paddingBetween,
+      style,
+      weight
     )
 
-    ctx.font = `${style} ${weight} ${circleRadius}px ${data.fontFamily}`
+    ctx.font = `${style} ${weight} ${fontSize}px ${data.fontFamily}`
     const bannerTextWidth = ctx.measureText(data.bannerText).width
 
-    const logoWidth = circleRadius * 2
+    const logoWidth = logoRadius * 2
     const totalContentWidth = logoWidth + paddingBetween + bannerTextWidth
     const startX = (width - totalContentWidth) / 2
     const centerY = height / 2
 
-    const logoX = startX + circleRadius
-    const cornerRadius = Math.min(data.logoRoundness, circleRadius)
+    const logoX = startX + logoRadius
+    const cornerRadius = Math.min(data.logoRoundness, logoRadius)
+
     drawRoundedRect(
       ctx,
-      logoX - circleRadius,
-      centerY - circleRadius,
+      logoX - logoRadius,
+      centerY - logoRadius,
       logoWidth,
       logoWidth,
       cornerRadius
@@ -161,7 +178,7 @@ export function Logos() {
     ctx.textBaseline = "middle"
     ctx.fillText(data.logoText, logoX, centerY)
 
-    const bannerTextX = logoX + circleRadius + paddingBetween
+    const bannerTextX = logoX + logoRadius + paddingBetween
     ctx.fillStyle = data.bannerColor
     ctx.textAlign = "left"
     ctx.fillText(data.bannerText, bannerTextX, centerY)
@@ -169,27 +186,6 @@ export function Logos() {
     const dataURL = canvas.toDataURL("image/svg+xml")
     setImg(dataURL)
     setLoading(false)
-
-    function drawRoundedRect(
-      ctx: CanvasRenderingContext2D,
-      x: number,
-      y: number,
-      width: number,
-      height: number,
-      radius: number
-    ) {
-      ctx.beginPath()
-      if (radius === 0) {
-        ctx.rect(x, y, width, height)
-      } else {
-        ctx.moveTo(x + radius, y)
-        ctx.arcTo(x + width, y, x + width, y + height, radius)
-        ctx.arcTo(x + width, y + height, x, y + height, radius)
-        ctx.arcTo(x, y + height, x, y, radius)
-        ctx.arcTo(x, y, x + width, y, radius)
-      }
-      ctx.closePath()
-    }
   }, [form, fontVariants])
 
   React.useEffect(() => {
@@ -381,12 +377,12 @@ export function Logos() {
                     />
                   </div>
                   <div className="order-1 col-span-1 space-y-6 lg:order-2 lg:col-span-2">
-                    <div className="flex h-96 w-full items-center justify-center rounded-md border">
+                    <div className="flex w-full items-center justify-center overflow-hidden rounded-md border">
                       {img ? (
                         <CustomImage
                           src={img}
                           alt="Generated Logo"
-                          className="aspect-video h-full w-full object-contain"
+                          className="h-full w-full object-contain"
                           width={1000}
                           height={600}
                           onError={() => setImg(null)}

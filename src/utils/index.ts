@@ -1,6 +1,7 @@
 export * from "./base-url"
 export * from "./get-emoji-url"
 export * from "./img-to-url"
+export * from "./load-fonts"
 export * from "./manifest"
 export * from "./menu"
 export * from "./sizes"
@@ -30,3 +31,61 @@ export const roundnessOptions = [
   { value: "circle", label: "Circle" },
   { value: "rounded", label: "Rounded" },
 ]
+
+export const calculateSizes = (
+  ctx: CanvasRenderingContext2D,
+  data: {
+    bannerText: string
+    fontFamily: string
+  },
+  width: number,
+  height: number,
+  paddingBetween: number,
+  style: string,
+  weight: string
+): { fontSize: number; logoRadius: number } => {
+  const minPadding = 70
+  const minRadius = 20
+  const maxRadius = height * 0.3
+
+  let fontSize = maxRadius
+  let textWidth: number
+  let logoRadius: number
+
+  do {
+    ctx.font = `${style} ${weight} ${fontSize}px ${data.fontFamily}`
+    textWidth = ctx.measureText(data.bannerText).width
+    logoRadius = fontSize
+    const totalWidth = 2 * logoRadius + paddingBetween + textWidth
+    if (totalWidth <= width - 2 * minPadding) {
+      break
+    }
+    fontSize -= 1
+  } while (fontSize >= minRadius)
+
+  return {
+    fontSize,
+    logoRadius: Math.max(minRadius, logoRadius),
+  }
+}
+
+export const drawRoundedRect = (
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number
+) => {
+  ctx.beginPath()
+  if (radius === 0) {
+    ctx.rect(x, y, width, height)
+  } else {
+    ctx.moveTo(x + radius, y)
+    ctx.arcTo(x + width, y, x + width, y + height, radius)
+    ctx.arcTo(x + width, y + height, x, y + height, radius)
+    ctx.arcTo(x, y + height, x, y, radius)
+    ctx.arcTo(x, y, x + width, y, radius)
+  }
+  ctx.closePath()
+}

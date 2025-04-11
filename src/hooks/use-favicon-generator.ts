@@ -1,5 +1,5 @@
 import * as React from "react"
-import { generateManifest, loadImage, sizes } from "@/utils"
+import { generateManifest, loadFonts, loadImage, sizes } from "@/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   FaviconComposer,
@@ -173,17 +173,8 @@ export function useFaviconGenerator(
 
     const [, weight, style] = selectedFont.name.split(" ")
 
-    const WebFont = (await import("webfontloader")).default
-
-    await new Promise<void>((resolve) => {
-      WebFont.load({
-        google: { families: [data.fontFamily] },
-        active: () => resolve(),
-        inactive: () => {
-          console.error("Font loading failed")
-          resolve()
-        },
-      })
+    await loadFonts({
+      families: [data.fontFamily],
     })
 
     const payload: TextIconGeneratorOptions = {
