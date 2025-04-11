@@ -38,6 +38,13 @@ import { notifyError } from "@/components/toast"
 
 import Fonts from "../../public/fonts.json"
 
+const generateRandomColor = (useWhiteBias = true): string => {
+  if (useWhiteBias && Math.random() < 0.8) return "#FFFFFF"
+  return `#${Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, "0")}`
+}
+
 const DEFAULT_VALUES: LogoFormSchema = {
   logoText: "F",
   logoColor: "#FFE8F5",
@@ -72,6 +79,26 @@ export function Logos() {
       Fonts.find((font) => font.family === selectedFontFamily)?.variants || [],
     [selectedFontFamily]
   )
+
+  const generateRandomLogo = React.useCallback((): LogoFormSchema => {
+    if (!Fonts.length) return DEFAULT_VALUES
+
+    const randomFontFamily =
+      Fonts[Math.floor(Math.random() * Fonts.length)].family
+
+    return {
+      ...DEFAULT_VALUES,
+      logoColor: generateRandomColor(),
+      bannerColor: generateRandomColor(),
+      logoBackgroundColor: generateRandomColor(false),
+      bannerBackgroundColor: generateRandomColor(false),
+      logoRoundness: Math.floor(Math.random() * 101),
+      fontFamily: randomFontFamily || DEFAULT_VALUES.fontFamily,
+      fontWeight:
+        Fonts.find((font) => font.family === randomFontFamily)?.variants[0]
+          ?.name || DEFAULT_VALUES.fontWeight,
+    }
+  }, [])
 
   const onSubmit = async (data: LogoFormSchema) => {
     const { fontWeight } = data
@@ -200,47 +227,16 @@ export function Logos() {
     })
   }, [form, fontVariants])
 
-  const generateRandomLogo = React.useCallback(() => {
-    if (!Fonts || loading) return DEFAULT_VALUES
-
-    const randomLogo = {
-      ...DEFAULT_VALUES,
-      logoColor:
-        Math.random() < 0.8
-          ? "#FFFFFF"
-          : `#${Math.floor(Math.random() * 16777215)
-              .toString(16)
-              .padStart(6, "0")}`,
-      bannerColor:
-        Math.random() < 0.8
-          ? "#FFFFFF"
-          : `#${Math.floor(Math.random() * 16777215)
-              .toString(16)
-              .padStart(6, "0")}`,
-      logoBackgroundColor: `#${Math.floor(Math.random() * 16777215)
-        .toString(16)
-        .padStart(6, "0")}`,
-      bannerBackgroundColor: `#${Math.floor(Math.random() * 16777215)
-        .toString(16)
-        .padStart(6, "0")}`,
-      logoRoundness: Math.floor(Math.random() * 101),
-      fontFamily:
-        Fonts[Math.floor(Math.random() * Fonts.length)].family ||
-        "Leckerli One",
-    }
-    return randomLogo
-  }, [])
-
   React.useEffect(() => {
     form.reset(generateRandomLogo())
   }, [form, generateRandomLogo])
 
   React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      updateCanvas()
-      const subscription = form.watch(() => updateCanvas())
-      return () => subscription.unsubscribe()
-    }
+    if (typeof window === "undefined") return
+
+    updateCanvas()
+    const subscription = form.watch(() => updateCanvas())
+    return () => subscription.unsubscribe()
   }, [form, updateCanvas])
 
   return (

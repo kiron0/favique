@@ -10,7 +10,7 @@ import {
 
 interface ColorPickerProps {
   value?: string
-  onChange?: (color: string) => void
+  onChange?: (value: string) => void
   disabled?: boolean
   className?: string
 }
