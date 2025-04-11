@@ -133,7 +133,7 @@ export function Converter() {
   }
 
   return (
-    <div className="space-y-4 pb-2 md:space-y-8">
+    <div className="space-y-4 pb-2 md:space-y-6 lg:space-y-8">
       <Banner
         title="Favicon Converter / Generate from Image"
         description="Quickly generate your favicon from an image by uploading your image below. Download your favicon in the most up to date formats."

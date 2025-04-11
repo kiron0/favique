@@ -1,54 +1,435 @@
 "use client"
 
+import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Loader2 } from "lucide-react"
 import { useForm, UseFormReturn } from "react-hook-form"
-import { z } from "zod"
 
+import { logoFormSchema, LogoFormSchema } from "@/lib/schema"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Slider } from "@/components/ui/slider"
 import { Banner } from "@/components/banner"
+import { ColorPicker } from "@/components/color-picker"
+import { CustomImage } from "@/components/custom-image"
+import { FontsSelection } from "@/components/fonts-selection"
+import { notifyError } from "@/components/toast"
 
-const logoFormSchema = z.object({
-  logoText: z.string().min(1, "Logo text is required"),
-  logoColor: z.string().min(1, "Logo color is required"),
-  bannerText: z.string().min(1, "Banner text is required"),
-  bannerColor: z.string().min(1, "Banner color is required"),
-  logoBackgroundColor: z.string().min(1, "Logo background color is required"),
-  bannerBackgroundColor: z
-    .string()
-    .min(1, "Banner background color is required"),
-  logoFontFamily: z.string().min(1, "Logo font family is required"),
-  logoFontSize: z.number().min(1, "Logo font size is required"),
-  logoFontStyle: z.string().optional(),
-  logoFontWeight: z.string().min(1, "Logo font weight is required"),
-})
-type LogoFormSchema = z.infer<typeof logoFormSchema>
+import Fonts from "../../public/fonts.json"
 
 const DEFAULT_VALUES: LogoFormSchema = {
   logoText: "F",
-  logoColor: "#000000",
+  logoColor: "#FFE8F5",
   bannerText: "Favique",
-  bannerColor: "#ffffff",
-  logoBackgroundColor: "#ffffff",
-  bannerBackgroundColor: "#000000",
-  logoFontFamily: "Arial",
-  logoFontSize: 100,
-  logoFontStyle: "normal",
-  logoFontWeight: "400",
+  bannerColor: "#8000FF",
+  logoBackgroundColor: "#8000FF",
+  bannerBackgroundColor: "#FFE8F5",
+  fontFamily: "Leckerli One",
+  fontWeight: "Regular 400 Normal",
+  logoRoundness: 15,
 }
 
 export function Logos() {
+  const [img, setImg] = React.useState<string | null>(null)
+  const [loading, setLoading] = React.useState(false)
+
   const form = useForm<LogoFormSchema>({
     resolver: zodResolver(logoFormSchema),
     defaultValues: DEFAULT_VALUES,
   }) as UseFormReturn<LogoFormSchema>
 
+  const selectedFontFamily = form.watch("fontFamily")
+
+  const fontVariants = React.useMemo(
+    () =>
+      Fonts.find((font) => font.family === selectedFontFamily)?.variants || [],
+    [selectedFontFamily]
+  )
+
+  const onSubmit = async (data: LogoFormSchema) => {
+    try {
+      await updateCanvas()
+    } catch (error) {
+      return notifyError({
+        title: "Error generating logo",
+        description: "Please try again later.",
+      })
+    }
+  }
+
+  const updateCanvas = React.useCallback(async () => {
+    const data = form.getValues()
+
+    const selectedFont = fontVariants.find((v) => v.name === data.fontWeight)
+
+    if (!selectedFont) {
+      return notifyError({
+        title: "Font weight not found",
+        description: "Please select a valid font weight.",
+      })
+    }
+
+    const [, weight, style] = selectedFont.name.split(" ")
+
+    const canvas = document.createElement("canvas")
+
+    if (!canvas) {
+      return notifyError({
+        title: "Canvas not found",
+        description: "Please try again later.",
+      })
+    }
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    // Set canvas dimensions (e.g., 600x200 to match the aspect ratio of the image)
+    const width = 1000
+    const height = 400
+    canvas.width = width * 2 // High-DPI support
+    canvas.height = height * 2
+    canvas.style.width = `${width}px`
+    canvas.style.height = `${height}px`
+    ctx.scale(2, 2) // Scale for high-DPI
+
+    // Clear the canvas
+    ctx.clearRect(0, 0, width, height)
+
+    // Draw the banner background
+    ctx.fillStyle = data.bannerBackgroundColor
+    ctx.fillRect(0, 0, width, height)
+
+    // Define the circle and text properties
+    const circleRadius = height * 0.3 // 40% of the height
+    const paddingBetween = 40 // Padding between circle and text
+
+    const WebFont = (await import("webfontloader")).default
+
+    await new Promise<void>((resolve) => {
+      WebFont.load({
+        google: { families: [data.fontFamily] },
+        active: () => resolve(),
+        inactive: () => {
+          console.error("Font loading failed")
+          resolve()
+        },
+      })
+    })
+
+    // Set font for banner text to measure its width
+    ctx.font = `${style} ${weight} ${circleRadius * 0.8}px ${data.fontFamily}`
+    const bannerTextWidth = ctx.measureText(data.bannerText).width
+
+    // Calculate the total width of the circle and text combined
+    const totalContentWidth =
+      circleRadius * 2 + paddingBetween + bannerTextWidth
+
+    // Calculate the starting X position to center the content
+    const startX = (width - totalContentWidth) / 2
+
+    // Draw the rounded rectangle logo background
+    const circleX = startX + circleRadius // Center of the circle
+    const circleY = height / 2 // Center vertically
+    const rectWidth = circleRadius * 2
+    const rectHeight = circleRadius * 2
+    const cornerRadius = data.logoRoundness
+
+    ctx.beginPath()
+    ctx.moveTo(circleX - rectWidth / 2 + cornerRadius, circleY - rectHeight / 2)
+    ctx.lineTo(circleX + rectWidth / 2 - cornerRadius, circleY - rectHeight / 2)
+    ctx.quadraticCurveTo(
+      circleX + rectWidth / 2,
+      circleY - rectHeight / 2,
+      circleX + rectWidth / 2,
+      circleY - rectHeight / 2 + cornerRadius
+    )
+    ctx.lineTo(circleX + rectWidth / 2, circleY + rectHeight / 2 - cornerRadius)
+    ctx.quadraticCurveTo(
+      circleX + rectWidth / 2,
+      circleY + rectHeight / 2,
+      circleX + rectWidth / 2 - cornerRadius,
+      circleY + rectHeight / 2
+    )
+    ctx.lineTo(circleX - rectWidth / 2 + cornerRadius, circleY + rectHeight / 2)
+    ctx.quadraticCurveTo(
+      circleX - rectWidth / 2,
+      circleY + rectHeight / 2,
+      circleX - rectWidth / 2,
+      circleY + rectHeight / 2 - cornerRadius
+    )
+    ctx.lineTo(circleX - rectWidth / 2, circleY - rectHeight / 2 + cornerRadius)
+    ctx.quadraticCurveTo(
+      circleX - rectWidth / 2,
+      circleY - rectHeight / 2,
+      circleX - rectWidth / 2 + cornerRadius,
+      circleY - rectHeight / 2
+    )
+    ctx.closePath()
+    ctx.fillStyle = data.logoBackgroundColor
+    ctx.fill()
+
+    // Draw the logo text ("F") inside the circle
+    ctx.fillStyle = data.logoColor
+    ctx.font = `${style} ${weight} ${circleRadius * 1}px ${data.fontFamily}` // Adjust font size
+    ctx.textAlign = "center"
+    ctx.textBaseline = "middle"
+    ctx.fillText(data.logoText, circleX, circleY)
+
+    // Draw the banner text ("Favique")
+    const bannerTextX = circleX + circleRadius + paddingBetween // Position to the right of the circle
+    ctx.fillStyle = data.bannerColor
+    ctx.font = `${style} ${weight} ${circleRadius * 1}px ${data.fontFamily}` // Slightly smaller font for banner text
+    ctx.textAlign = "left"
+    ctx.textBaseline = "middle"
+    ctx.fillText(data.bannerText, bannerTextX, circleY)
+
+    // Convert canvas to data URL
+    const dataURL = canvas.toDataURL("image/png")
+    setImg(dataURL)
+    setLoading(false)
+  }, [form, fontVariants])
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      updateCanvas()
+      const subscription = form.watch(() => updateCanvas())
+      return () => subscription.unsubscribe()
+    }
+  }, [form, updateCanvas])
+
   return (
-    <div className="space-y-4 pb-2 md:space-y-8">
+    <div className="space-y-4 pb-2 md:space-y-6 lg:space-y-8">
       <Banner
         title="Logo Generator"
         description="Generate a logo by configuring the settings below. Download your logo in a variety of layouts and formats."
       />
-      <div className="flex h-96 flex-col items-center justify-center text-center">
-        <p className="mb-4 text-lg text-balance">On the way...!</p>
+      <div className="mx-auto w-full max-w-7xl">
+        <div className="mx-4 flex-col space-y-8 xl:mx-0">
+          <Card className="w-full border-none">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold md:text-2xl">
+                Logo Settings
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="grid grid-cols-1 gap-8 lg:grid-cols-3"
+                >
+                  <div className="order-2 grid grid-cols-1 gap-6 lg:order-1">
+                    <FormField
+                      control={form.control}
+                      name="bannerText"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Banner Text</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              placeholder="Banner Text"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="bannerColor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Banner Color</FormLabel>
+                          <FormControl>
+                            <ColorPicker {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="bannerBackgroundColor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Banner Background Color</FormLabel>
+                          <FormControl>
+                            <ColorPicker {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="logoText"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Logo Text</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              placeholder="Logo Text"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="logoColor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Logo Color</FormLabel>
+                          <FormControl>
+                            <ColorPicker {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="logoBackgroundColor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Logo Background Color</FormLabel>
+                          <FormControl>
+                            <ColorPicker {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="logoRoundness"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Background Roundness: {field.value}px
+                          </FormLabel>
+                          <FormControl>
+                            <Slider
+                              max={100}
+                              step={1}
+                              value={[field.value]}
+                              onValueChange={(value) => {
+                                field.onChange(value[0])
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="fontFamily"
+                      render={({ field }) => {
+                        return (
+                          <FormItem>
+                            <FormLabel>Font Family</FormLabel>
+                            <FormControl>
+                              <FontsSelection
+                                value={field.value}
+                                onValueChange={(value) => field.onChange(value)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )
+                      }}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="fontWeight"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Font Weight</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            value={field.value}
+                            disabled={fontVariants.length === 0}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select font weight" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {fontVariants.map((variant) => (
+                                <SelectItem
+                                  key={variant.name}
+                                  value={variant.name}
+                                >
+                                  {variant.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="order-1 col-span-1 space-y-6 lg:order-2 lg:col-span-2">
+                    <div className="flex h-96 w-full items-center justify-center rounded-md border">
+                      {img ? (
+                        <CustomImage
+                          src={img}
+                          alt="Generated Logo"
+                          className="aspect-video h-full w-full object-contain"
+                          width={1000}
+                          height={600}
+                          onError={() => setImg(null)}
+                          onLoad={() => setLoading(false)}
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center rounded-md border">
+                          <p className="text-muted-foreground">
+                            No image generated
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex justify-end">
+                      <Button type="submit" disabled={loading}>
+                        {loading ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Downloading...
+                          </>
+                        ) : (
+                          "Download"
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )

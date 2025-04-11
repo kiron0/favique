@@ -54,7 +54,7 @@ const menuItems: MenuItem[] = [
 
 export function Home() {
   return (
-    <div className="space-y-12">
+    <div className="space-y-4 pb-2 md:space-y-6 lg:space-y-8">
       <Banner
         title="Favicon Generator"
         description="The only favicon generator you need for your next project. Quickly generate your favicon from text, image, or choose from hundreds of emojis."
@@ -70,7 +70,7 @@ export function Home() {
             >
               <CustomImage
                 src={item.img.src}
-                className="h-48 w-full object-cover"
+                className="h-36 w-full object-cover md:h-40 lg:h-44"
                 width={item.img.width}
                 height={item.img.height}
                 placeholder="blur"

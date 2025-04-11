@@ -49,7 +49,7 @@ export function Emoji() {
   }, [emojis, selectedGroup])
 
   return (
-    <div className="space-y-4 pb-2 md:space-y-8">
+    <div className="space-y-4 pb-2 md:space-y-6 lg:space-y-8">
       <Banner
         title="Favicon Generator / Generate from Emoji"
         description="Choose from hundreds of emojis to create your favicon. Emoji images from the emoji-picker-react."

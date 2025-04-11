@@ -23,3 +23,21 @@ export const textIconFormSchema = z.object({
     .optional(),
 })
 export type TextIconFormSchema = z.infer<typeof textIconFormSchema>
+
+export const logoFormSchema = z.object({
+  logoText: z.string().min(1, "Logo text is required"),
+  logoColor: z.string().min(1, "Logo color is required"),
+  bannerText: z.string().min(1, "Banner text is required"),
+  bannerColor: z.string().min(1, "Banner color is required"),
+  logoBackgroundColor: z.string().min(1, "Logo background color is required"),
+  bannerBackgroundColor: z
+    .string()
+    .min(1, "Banner background color is required"),
+  fontFamily: z.string().min(1, "Logo font family is required"),
+  fontWeight: z.string().min(1, "Logo font weight is required"),
+  logoRoundness: z
+    .number()
+    .min(0, "Logo roundness must be a positive number")
+    .max(100, "Logo roundness must be less than 100"),
+})
+export type LogoFormSchema = z.infer<typeof logoFormSchema>
