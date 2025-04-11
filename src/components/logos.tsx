@@ -94,21 +94,18 @@ export function Logos() {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    // Canvas setup
-    const width = 1000
-    const height = 400
+    const width = 500
+    const height = 300
     canvas.width = width * 2
     canvas.height = height * 2
     canvas.style.width = `${width}px`
     canvas.style.height = `${height}px`
     ctx.scale(2, 2)
 
-    // Clear and draw background
     ctx.clearRect(0, 0, width, height)
     ctx.fillStyle = data.bannerBackgroundColor
     ctx.fillRect(0, 0, width, height)
 
-    // Load font
     const WebFont = (await import("webfontloader")).default
 
     await new Promise<void>((resolve) => {
@@ -122,17 +119,15 @@ export function Logos() {
       })
     })
 
-    // Constants
-    const minPadding = 20
-    const paddingBetween = 40
+    const minPadding = 70
+    const paddingBetween = 20
     const maxRadius = height * 0.3
     const minRadius = 20
     const tempFontSize = 100
 
-    // Calculate adaptive circleRadius
     ctx.font = `${style} ${weight} ${tempFontSize}px ${data.fontFamily}`
     const bannerTextWidthTemp = ctx.measureText(data.bannerText).width
-    const k = bannerTextWidthTemp / tempFontSize // Text width scaling factor
+    const k = bannerTextWidthTemp / tempFontSize
     const maxContentWidth = width - 2 * minPadding
     const availableRadius = (maxContentWidth - paddingBetween) / (2 + k)
     const circleRadius = Math.max(
@@ -140,19 +135,16 @@ export function Logos() {
       Math.min(maxRadius, availableRadius)
     )
 
-    // Set font size and measure actual text width
     ctx.font = `${style} ${weight} ${circleRadius}px ${data.fontFamily}`
     const bannerTextWidth = ctx.measureText(data.bannerText).width
 
-    // Calculate content layout
     const logoWidth = circleRadius * 2
     const totalContentWidth = logoWidth + paddingBetween + bannerTextWidth
     const startX = (width - totalContentWidth) / 2
     const centerY = height / 2
 
-    // Draw logo background (rounded rectangle)
     const logoX = startX + circleRadius
-    const cornerRadius = data.logoRoundness
+    const cornerRadius = Math.min(data.logoRoundness, circleRadius)
     drawRoundedRect(
       ctx,
       logoX - circleRadius,
@@ -164,24 +156,20 @@ export function Logos() {
     ctx.fillStyle = data.logoBackgroundColor
     ctx.fill()
 
-    // Draw logo text
     ctx.fillStyle = data.logoColor
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
     ctx.fillText(data.logoText, logoX, centerY)
 
-    // Draw banner text
     const bannerTextX = logoX + circleRadius + paddingBetween
     ctx.fillStyle = data.bannerColor
     ctx.textAlign = "left"
     ctx.fillText(data.bannerText, bannerTextX, centerY)
 
-    // Output canvas as image
-    const dataURL = canvas.toDataURL("image/png")
+    const dataURL = canvas.toDataURL("image/svg+xml")
     setImg(dataURL)
     setLoading(false)
 
-    // Reusable rounded rectangle function
     function drawRoundedRect(
       ctx: CanvasRenderingContext2D,
       x: number,
@@ -191,20 +179,15 @@ export function Logos() {
       radius: number
     ) {
       ctx.beginPath()
-      ctx.moveTo(x + radius, y)
-      ctx.lineTo(x + width - radius, y)
-      ctx.quadraticCurveTo(x + width, y, x + width, y + radius)
-      ctx.lineTo(x + width, y + height - radius)
-      ctx.quadraticCurveTo(
-        x + width,
-        y + height,
-        x + width - radius,
-        y + height
-      )
-      ctx.lineTo(x + radius, y + height)
-      ctx.quadraticCurveTo(x, y + height, x, y + height - radius)
-      ctx.lineTo(x, y + radius)
-      ctx.quadraticCurveTo(x, y, x + radius, y)
+      if (radius === 0) {
+        ctx.rect(x, y, width, height)
+      } else {
+        ctx.moveTo(x + radius, y)
+        ctx.arcTo(x + width, y, x + width, y + height, radius)
+        ctx.arcTo(x + width, y + height, x, y + height, radius)
+        ctx.arcTo(x, y + height, x, y, radius)
+        ctx.arcTo(x, y, x + width, y, radius)
+      }
       ctx.closePath()
     }
   }, [form, fontVariants])
