@@ -53,6 +53,19 @@ class CanvasToSVG {
     const serializer = new XMLSerializer()
     return serializer.serializeToString(svg)
   }
+
+  toHighResolutionSVG(scale: number = 2): string {
+    const tempCanvas = document.createElement("canvas")
+    tempCanvas.width = this.canvas.width * scale
+    tempCanvas.height = this.canvas.height * scale
+
+    const ctx = tempCanvas.getContext("2d")!
+    ctx.imageSmoothingEnabled = false
+    ctx.drawImage(this.canvas, 0, 0, tempCanvas.width, tempCanvas.height)
+
+    const highResExporter = new CanvasToSVG(tempCanvas)
+    return highResExporter.toSVG()
+  }
 }
 
 export default CanvasToSVG
