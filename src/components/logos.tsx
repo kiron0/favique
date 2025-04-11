@@ -51,9 +51,9 @@ const DEFAULT_VALUES: LogoFormSchema = {
 }
 
 export function Logos() {
-  const [img, setImg] = React.useState<string | null>(null)
   const [svg, setSvg] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(false)
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
 
   const form = useForm<LogoFormSchema>({
     resolver: zodResolver(logoFormSchema),
@@ -71,7 +71,16 @@ export function Logos() {
   const onSubmit = async (data: LogoFormSchema) => {
     const { fontWeight } = data
 
-    if (!img || !svg) {
+    const canvas = canvasRef.current
+
+    if (!canvas) {
+      return notifyError({
+        title: "Canvas not found",
+        description: "Please try again later.",
+      })
+    }
+
+    if (!svg) {
       return notifyError({
         title: "Image not generated",
         description: "Please generate the image before downloading.",
@@ -96,8 +105,10 @@ export function Logos() {
 
       const imgName = "logo"
 
-      const imgFile = await fetch(img)
-      const imgBlob = await imgFile.blob()
+      const img = canvas.toDataURL("image/png")
+
+      const imgBlob = await fetch(img).then((res) => res.blob())
+
       zip.file(`${imgName}.png`, imgBlob)
 
       zip.file(`${imgName}.svg`, svg)
@@ -189,9 +200,6 @@ export function Logos() {
     ctx.fillStyle = data.bannerColor
     ctx.textAlign = "left"
     ctx.fillText(data.bannerText, bannerTextX, centerY)
-
-    const pngDataURL = canvas.toDataURL("image/png")
-    setImg(pngDataURL)
 
     const exporter = new CanvasToSVG(canvas)
     const svgData = exporter.toSVG()
