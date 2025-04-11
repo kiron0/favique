@@ -44,7 +44,7 @@ export const calculateSizes = (
   style: string,
   weight: string
 ): { fontSize: number; logoRadius: number } => {
-  const minPadding = 70
+  const minPadding = 80
   const minRadius = 20
   const maxRadius = height * 0.3
 

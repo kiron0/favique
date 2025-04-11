@@ -3,6 +3,7 @@
 import * as React from "react"
 import { siteConfig } from "@/config"
 import { calculateSizes, drawRoundedRect, loadFonts } from "@/utils"
+import CanvasToSVG from "@/utils/canvas-to-svg"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { saveAs } from "file-saver"
 import JSZip from "jszip"
@@ -126,12 +127,7 @@ export function Logos() {
 
     const canvas = document.createElement("canvas")
 
-    if (!canvas) {
-      return notifyError({
-        title: "Canvas not found",
-        description: "Please try again later.",
-      })
-    }
+    if (!canvas) return
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
@@ -197,54 +193,9 @@ export function Logos() {
     const pngDataURL = canvas.toDataURL("image/png")
     setImg(pngDataURL)
 
-    const svg = `
-      <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-        <!-- Background -->
-        <rect x="0" y="0" width="${width}" height="${height}" fill="${data.bannerBackgroundColor}" />
-
-        <!-- Logo (Rounded Rectangle) -->
-        <rect
-          x="${logoX - logoRadius}"
-          y="${centerY - logoRadius}"
-          width="${logoWidth}"
-          height="${logoWidth}"
-          rx="${cornerRadius}"
-          ry="${cornerRadius}"
-          fill="${data.logoBackgroundColor}"
-        />
-
-        <!-- Logo Text -->
-        <text
-          x="${logoX}"
-          y="${centerY}"
-          fill="${data.logoColor}"
-          font-family="${data.fontFamily}"
-          font-size="${fontSize}"
-          font-style="${style}"
-          font-weight="${weight}"
-          text-anchor="middle"
-          dominant-baseline="middle"
-        >
-          ${data.logoText}
-        </text>
-
-        <!-- Banner Text -->
-        <text
-          x="${bannerTextX}"
-          y="${centerY}"
-          fill="${data.bannerColor}"
-          font-family="${data.fontFamily}"
-          font-size="${fontSize}"
-          font-style="${style}"
-          font-weight="${weight}"
-          text-anchor="start"
-          dominant-baseline="middle"
-        >
-          ${data.bannerText}
-        </text>
-      </svg>
-    `
-    setSvg(svg)
+    const exporter = new CanvasToSVG(canvas)
+    const svgData = exporter.toSVG()
+    setSvg(svgData)
   }, [form, fontVariants])
 
   React.useEffect(() => {
@@ -437,18 +388,16 @@ export function Logos() {
                   </div>
                   <div className="order-1 col-span-1 space-y-6 lg:order-2 lg:col-span-2">
                     <div className="flex w-full items-center justify-center overflow-hidden rounded-md border">
-                      {img ? (
+                      {svg ? (
                         <CustomImage
-                          src={img}
+                          src={`data:image/svg+xml;base64,${btoa(svg)}`}
                           alt="Generated Logo"
                           className="h-full w-full object-contain"
                           width={1000}
                           height={600}
-                          placeholder="blur"
-                          blurDataURL={img}
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center rounded-md border">
+                        <div className="flex aspect-video h-full w-full items-center justify-center rounded-md border">
                           <p className="text-muted-foreground">
                             No image generated
                           </p>
