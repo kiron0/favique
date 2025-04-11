@@ -75,20 +75,16 @@ export function Logos() {
 
   const updateCanvas = React.useCallback(async () => {
     const data = form.getValues()
-
     const selectedFont = fontVariants.find((v) => v.name === data.fontWeight)
-
     if (!selectedFont) {
       return notifyError({
         title: "Font weight not found",
         description: "Please select a valid font weight.",
       })
     }
-
     const [, weight, style] = selectedFont.name.split(" ")
 
     const canvas = document.createElement("canvas")
-
     if (!canvas) {
       return notifyError({
         title: "Canvas not found",
@@ -98,26 +94,21 @@ export function Logos() {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    // Set canvas dimensions (e.g., 600x200 to match the aspect ratio of the image)
+    // Canvas setup
     const width = 1000
     const height = 400
-    canvas.width = width * 2 // High-DPI support
+    canvas.width = width * 2
     canvas.height = height * 2
     canvas.style.width = `${width}px`
     canvas.style.height = `${height}px`
-    ctx.scale(2, 2) // Scale for high-DPI
+    ctx.scale(2, 2)
 
-    // Clear the canvas
+    // Clear and draw background
     ctx.clearRect(0, 0, width, height)
-
-    // Draw the banner background
     ctx.fillStyle = data.bannerBackgroundColor
     ctx.fillRect(0, 0, width, height)
 
-    // Define the circle and text properties
-    const circleRadius = height * 0.3 // 40% of the height
-    const paddingBetween = 40 // Padding between circle and text
-
+    // Load font
     const WebFont = (await import("webfontloader")).default
 
     await new Promise<void>((resolve) => {
@@ -131,77 +122,91 @@ export function Logos() {
       })
     })
 
-    // Set font for banner text to measure its width
-    ctx.font = `${style} ${weight} ${circleRadius * 0.8}px ${data.fontFamily}`
+    // Constants
+    const minPadding = 20
+    const paddingBetween = 40
+    const maxRadius = height * 0.3
+    const minRadius = 20
+    const tempFontSize = 100
+
+    // Calculate adaptive circleRadius
+    ctx.font = `${style} ${weight} ${tempFontSize}px ${data.fontFamily}`
+    const bannerTextWidthTemp = ctx.measureText(data.bannerText).width
+    const k = bannerTextWidthTemp / tempFontSize // Text width scaling factor
+    const maxContentWidth = width - 2 * minPadding
+    const availableRadius = (maxContentWidth - paddingBetween) / (2 + k)
+    const circleRadius = Math.max(
+      minRadius,
+      Math.min(maxRadius, availableRadius)
+    )
+
+    // Set font size and measure actual text width
+    ctx.font = `${style} ${weight} ${circleRadius}px ${data.fontFamily}`
     const bannerTextWidth = ctx.measureText(data.bannerText).width
 
-    // Calculate the total width of the circle and text combined
-    const totalContentWidth =
-      circleRadius * 2 + paddingBetween + bannerTextWidth
-
-    // Calculate the starting X position to center the content
+    // Calculate content layout
+    const logoWidth = circleRadius * 2
+    const totalContentWidth = logoWidth + paddingBetween + bannerTextWidth
     const startX = (width - totalContentWidth) / 2
+    const centerY = height / 2
 
-    // Draw the rounded rectangle logo background
-    const circleX = startX + circleRadius // Center of the circle
-    const circleY = height / 2 // Center vertically
-    const rectWidth = circleRadius * 2
-    const rectHeight = circleRadius * 2
+    // Draw logo background (rounded rectangle)
+    const logoX = startX + circleRadius
     const cornerRadius = data.logoRoundness
-
-    ctx.beginPath()
-    ctx.moveTo(circleX - rectWidth / 2 + cornerRadius, circleY - rectHeight / 2)
-    ctx.lineTo(circleX + rectWidth / 2 - cornerRadius, circleY - rectHeight / 2)
-    ctx.quadraticCurveTo(
-      circleX + rectWidth / 2,
-      circleY - rectHeight / 2,
-      circleX + rectWidth / 2,
-      circleY - rectHeight / 2 + cornerRadius
+    drawRoundedRect(
+      ctx,
+      logoX - circleRadius,
+      centerY - circleRadius,
+      logoWidth,
+      logoWidth,
+      cornerRadius
     )
-    ctx.lineTo(circleX + rectWidth / 2, circleY + rectHeight / 2 - cornerRadius)
-    ctx.quadraticCurveTo(
-      circleX + rectWidth / 2,
-      circleY + rectHeight / 2,
-      circleX + rectWidth / 2 - cornerRadius,
-      circleY + rectHeight / 2
-    )
-    ctx.lineTo(circleX - rectWidth / 2 + cornerRadius, circleY + rectHeight / 2)
-    ctx.quadraticCurveTo(
-      circleX - rectWidth / 2,
-      circleY + rectHeight / 2,
-      circleX - rectWidth / 2,
-      circleY + rectHeight / 2 - cornerRadius
-    )
-    ctx.lineTo(circleX - rectWidth / 2, circleY - rectHeight / 2 + cornerRadius)
-    ctx.quadraticCurveTo(
-      circleX - rectWidth / 2,
-      circleY - rectHeight / 2,
-      circleX - rectWidth / 2 + cornerRadius,
-      circleY - rectHeight / 2
-    )
-    ctx.closePath()
     ctx.fillStyle = data.logoBackgroundColor
     ctx.fill()
 
-    // Draw the logo text ("F") inside the circle
+    // Draw logo text
     ctx.fillStyle = data.logoColor
-    ctx.font = `${style} ${weight} ${circleRadius * 1}px ${data.fontFamily}` // Adjust font size
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
-    ctx.fillText(data.logoText, circleX, circleY)
+    ctx.fillText(data.logoText, logoX, centerY)
 
-    // Draw the banner text ("Favique")
-    const bannerTextX = circleX + circleRadius + paddingBetween // Position to the right of the circle
+    // Draw banner text
+    const bannerTextX = logoX + circleRadius + paddingBetween
     ctx.fillStyle = data.bannerColor
-    ctx.font = `${style} ${weight} ${circleRadius * 1}px ${data.fontFamily}` // Slightly smaller font for banner text
     ctx.textAlign = "left"
-    ctx.textBaseline = "middle"
-    ctx.fillText(data.bannerText, bannerTextX, circleY)
+    ctx.fillText(data.bannerText, bannerTextX, centerY)
 
-    // Convert canvas to data URL
+    // Output canvas as image
     const dataURL = canvas.toDataURL("image/png")
     setImg(dataURL)
     setLoading(false)
+
+    // Reusable rounded rectangle function
+    function drawRoundedRect(
+      ctx: CanvasRenderingContext2D,
+      x: number,
+      y: number,
+      width: number,
+      height: number,
+      radius: number
+    ) {
+      ctx.beginPath()
+      ctx.moveTo(x + radius, y)
+      ctx.lineTo(x + width - radius, y)
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius)
+      ctx.lineTo(x + width, y + height - radius)
+      ctx.quadraticCurveTo(
+        x + width,
+        y + height,
+        x + width - radius,
+        y + height
+      )
+      ctx.lineTo(x + radius, y + height)
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius)
+      ctx.lineTo(x, y + radius)
+      ctx.quadraticCurveTo(x, y, x + radius, y)
+      ctx.closePath()
+    }
   }, [form, fontVariants])
 
   React.useEffect(() => {
