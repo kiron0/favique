@@ -21,7 +21,7 @@ class CanvasToSVG {
 
     const svg =
       `<svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet">
-    <image xlink:href="${dataURL}" href="${dataURL}" width="${svgWidth}" height="${svgHeight}" preserveAspectRatio="xMidYMid meet" /></svg>`.trim()
+    <image xlink:href="${dataURL}" href="${dataURL}" width="${svgWidth}" height="${svgHeight}" x="0" y="0" preserveAspectRatio="xMidYMid meet" /></svg>`.trim()
 
     return svg
   }
