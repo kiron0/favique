@@ -80,7 +80,7 @@ export function Logos() {
     [selectedFontFamily]
   )
 
-  const generateRandomLogo = React.useCallback((): LogoFormSchema => {
+  const generateRandomLogo = React.useCallback(() => {
     if (!Fonts.length) return DEFAULT_VALUES
 
     const randomFontFamily =
@@ -148,7 +148,10 @@ export function Logos() {
   const updateCanvas = React.useCallback(async () => {
     const data = form.getValues()
 
-    const selectedFont = fontVariants.find((v) => v.name === data.fontWeight)
+    const currentFont = Fonts.find((font) => font.family === data.fontFamily)
+    const selectedFont = currentFont?.variants.find(
+      (v) => v.name === data.fontWeight
+    )
 
     if (!selectedFont) return
 
@@ -225,7 +228,15 @@ export function Logos() {
       img: canvas.toDataURL("image/png"),
       svg: svgData,
     })
-  }, [form, fontVariants])
+  }, [form])
+
+  const handleRandomize = React.useCallback(() => {
+    const randomValues = generateRandomLogo()
+
+    Object.entries(randomValues).forEach(([key, value]) => {
+      form.setValue(key as keyof LogoFormSchema, value, { shouldDirty: true })
+    })
+  }, [form, generateRandomLogo])
 
   React.useEffect(() => {
     form.reset(generateRandomLogo())
@@ -441,7 +452,7 @@ export function Logos() {
                       <Button
                         variant="outline"
                         type="button"
-                        onClick={() => form.reset(generateRandomLogo())}
+                        onClick={handleRandomize}
                         disabled={loading || form.formState.isSubmitting}
                       >
                         <Shuffle className="h-4 w-4" />
