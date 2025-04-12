@@ -29,6 +29,7 @@ import { Banner } from "@/components/banner"
 import { ColorPicker } from "@/components/color-picker"
 import { CustomImage } from "@/components/custom-image"
 import { FontsSelection } from "@/components/fonts-selection"
+import { Installation } from "@/components/installation"
 
 export function Generator() {
   const [wantToAddSiteName, setWantToAddSiteName] = React.useState(false)
@@ -47,7 +48,7 @@ export function Generator() {
         title="Favicon Generator / Generate from Text"
         description="Quickly generate your favicon from text by selecting the text, fonts, and colors. Download your favicon in the most up-to-date formats."
       />
-      <div className="mx-auto w-full max-w-7xl">
+      <div className="mx-auto w-full max-w-7xl space-y-20">
         {img && (
           <div className="mx-4 mb-8 flex justify-between border-b pb-4 xl:mx-0">
             <div className="flex w-full items-center gap-4">
@@ -305,6 +306,7 @@ export function Generator() {
             </CardContent>
           </Card>
         </div>
+        <Installation />
       </div>
     </div>
   )

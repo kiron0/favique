@@ -50,6 +50,13 @@ const menuItems: MenuItem[] = [
     description:
       "Don't have a logo or image for your website and want to generate a favicon from scratch then use this tool to generate your favicon.",
   },
+  {
+    name: "Tutorials",
+    path: "/tutorials",
+    img: LogosImg,
+    description:
+      "Want to learn how to install a favicon on your website? Interested in how the .ico format works? We've created easy, but comprehensive tutorials!",
+  },
 ]
 
 export function Home() {

@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Banner } from "@/components/banner"
+import { Installation } from "@/components/installation"
 
 import { EmojiCard } from "./emoji-card"
 import { EmojiFavicon } from "./emoji-favicon"
@@ -54,7 +55,7 @@ export function Emoji() {
         title="Favicon Generator / Generate from Emoji"
         description="Choose from hundreds of emojis to create your favicon. Emoji images from the emoji-picker-react."
       />
-      <div className="mx-auto w-full max-w-7xl">
+      <div className="mx-auto w-full max-w-7xl space-y-20">
         <div className="mx-4 flex-col space-y-8 xl:mx-0">
           <div className="space-y-6">
             <h2 className="text-xl leading-none font-bold md:text-2xl">
@@ -132,6 +133,7 @@ export function Emoji() {
             </div>
           )}
         </div>
+        <Installation />
       </div>
     </div>
   )

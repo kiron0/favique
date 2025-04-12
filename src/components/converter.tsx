@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Banner } from "@/components/banner"
 import { CustomImage } from "@/components/custom-image"
+import { Installation } from "@/components/installation"
 import { notifyError } from "@/components/toast"
 
 interface TState {
@@ -138,7 +139,7 @@ export function Converter() {
         title="Favicon Converter / Generate from Image"
         description="Quickly generate your favicon from an image by uploading your image below. Download your favicon in the most up to date formats."
       />
-      <div className="mx-auto w-full max-w-7xl">
+      <div className="mx-auto w-full max-w-7xl space-y-20">
         <div className="mx-3 max-w-2xl flex-col space-y-8 xl:mx-0">
           <Card className="w-full border-none">
             <CardHeader>
@@ -293,6 +294,7 @@ export function Converter() {
             </CardContent>
           </Card>
         </div>
+        <Installation />
       </div>
     </div>
   )

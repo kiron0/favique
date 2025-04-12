@@ -20,4 +20,8 @@ export const menuItems: MenuItem[] = [
     title: "Logos",
     url: "/logos",
   },
+  {
+    title: "Tutorials",
+    url: "/tutorials",
+  },
 ]
