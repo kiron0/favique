@@ -23,7 +23,6 @@ interface ColorPickerProps {
   className?: string
 }
 
-// Convert hex to RGB array
 function hexToRgb(hex: string): [number, number, number] | null {
   const cleanHex = hex.replace(/^#/, "")
   if (cleanHex.length !== 6 || !/^[0-9a-fA-F]{6}$/.test(cleanHex)) return null
@@ -31,12 +30,10 @@ function hexToRgb(hex: string): [number, number, number] | null {
   return [(num >> 16) & 255, (num >> 8) & 255, num & 255]
 }
 
-// Convert RGB to hex string
 function rgbToHex(r: number, g: number, b: number): string {
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`
 }
 
-// Convert RGB to HSL
 function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
   const rNorm = r / 255
   const gNorm = g / 255
@@ -65,7 +62,6 @@ function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
   return [h, s, l]
 }
 
-// Convert HSL to RGB
 function hslToRgb(h: number, s: number, l: number): [number, number, number] {
   let r, g, b
   if (s === 0) {
@@ -88,7 +84,6 @@ function hslToRgb(h: number, s: number, l: number): [number, number, number] {
   return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)]
 }
 
-// Convert RGB to OKLab
 function rgbToOklab(r: number, g: number, b: number): [number, number, number] {
   const rLin = r / 255
   const gLin = g / 255
@@ -108,7 +103,6 @@ function rgbToOklab(r: number, g: number, b: number): [number, number, number] {
   return [L, a, b_]
 }
 
-// Convert OKLab to RGB
 function oklabToRgb(L: number, a: number, b: number): [number, number, number] {
   const l = L + 0.3963377774 * a + 0.2158037573 * b
   const m = L - 0.1055613458 * a - 0.0638541728 * b
@@ -126,7 +120,6 @@ function oklabToRgb(L: number, a: number, b: number): [number, number, number] {
   ]
 }
 
-// Convert OKLab to OKLCH
 function oklabToOklch(
   L: number,
   a: number,
@@ -138,7 +131,6 @@ function oklabToOklch(
   return [L, C, H]
 }
 
-// Convert OKLCH to OKLab
 function oklchToOklab(
   L: number,
   C: number,
@@ -148,34 +140,37 @@ function oklchToOklab(
   return [L, C * Math.cos(hRad), C * Math.sin(hRad)]
 }
 
-// Convert hex to RGB string
-function hexToRgbString(hex: string): string {
-  const rgb = hexToRgb(hex)
-  return rgb ? `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})` : ""
+function hexToHexString(hex: string): string {
+  return hex.replace(/^#/, "").toUpperCase()
 }
 
-// Convert hex to HSL string
+function hexToRgbString(hex: string): string {
+  const rgb = hexToRgb(hex)
+  return rgb ? `${rgb[0]} ${rgb[1]} ${rgb[2]}` : ""
+}
+
 function hexToHslString(hex: string): string {
   const rgb = hexToRgb(hex)
   if (!rgb) return ""
   const [h, s, l] = rgbToHsl(...rgb)
-  return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`
+  return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`
 }
 
-// Convert hex to OKLCH string
 function hexToOklchString(hex: string): string {
   const rgb = hexToRgb(hex)
   if (!rgb) return ""
   const [L, a, b] = rgbToOklab(...rgb)
   const [L_ok, C, H] = oklabToOklch(L, a, b)
-  return `oklch(${L_ok.toFixed(3)} ${C.toFixed(3)} ${Math.round(H)})`
+  return `${L_ok.toFixed(3)} ${C.toFixed(3)} ${Math.round(H)}`
 }
 
-// Parse RGB string to RGB values
+function parseHexString(hexStr: string): string | null {
+  if (!/^[0-9a-fA-F]{6}$/.test(hexStr)) return null
+  return `#${hexStr.toUpperCase()}`
+}
+
 function parseRgbString(rgbStr: string): [number, number, number] | null {
-  const match = rgbStr.match(
-    /rgb\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)/i
-  )
+  const match = rgbStr.match(/^(\d{1,3})\s+(\d{1,3})\s+(\d{1,3})$/)
   if (!match) return null
   const r = parseInt(match[1], 10)
   const g = parseInt(match[2], 10)
@@ -184,11 +179,8 @@ function parseRgbString(rgbStr: string): [number, number, number] | null {
   return [r, g, b]
 }
 
-// Parse HSL string to HSL values
 function parseHslString(hslStr: string): [number, number, number] | null {
-  const match = hslStr.match(
-    /hsl\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)/i
-  )
+  const match = hslStr.match(/^(\d{1,3})\s+(\d{1,3})%\s+(\d{1,3})%$/)
   if (!match) return null
   const h = parseInt(match[1], 10) % 360
   const s = parseInt(match[2], 10) / 100
@@ -197,11 +189,8 @@ function parseHslString(hslStr: string): [number, number, number] | null {
   return [h, s, l]
 }
 
-// Parse OKLCH string to OKLCH values
 function parseOklchString(oklchStr: string): [number, number, number] | null {
-  const match = oklchStr.match(
-    /oklch\s*\(\s*(\d*\.?\d+)\s+(\d*\.?\d+)\s+(\d{1,3})\s*\)/i
-  )
+  const match = oklchStr.match(/^(\d*\.?\d+)\s+(\d*\.?\d+)\s+(\d{1,3})$/)
   if (!match) return null
   const L = parseFloat(match[1])
   const C = parseFloat(match[2])
@@ -222,7 +211,7 @@ function ColorPicker({
   >("hex")
 
   function getInputValue() {
-    if (inputType === "hex") return value
+    if (inputType === "hex") return hexToHexString(value)
     if (inputType === "rgb") return hexToRgbString(value)
     if (inputType === "hsl") return hexToHslString(value)
     if (inputType === "oklch") return hexToOklchString(value)
@@ -232,7 +221,9 @@ function ColorPicker({
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value.trim()
     if (inputType === "hex") {
-      onChange?.(val)
+      const hex = parseHexString(val)
+      if (hex) onChange?.(hex)
+      else onChange?.(value)
     } else if (inputType === "rgb") {
       const rgb = parseRgbString(val)
       if (rgb) {
@@ -301,7 +292,7 @@ function ColorPicker({
               disabled={disabled}
             >
               <SelectTrigger className="w-[100px]">
-                <SelectValue placeholder="Select input type" />
+                <SelectValue placeholder="Select input type" />{" "}
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="hex">HEX</SelectItem>
@@ -318,15 +309,15 @@ function ColorPicker({
               className="w-full uppercase"
               placeholder={
                 inputType === "hex"
-                  ? "#FFFFFF"
+                  ? "FFFFFF"
                   : inputType === "rgb"
-                    ? "rgb(255, 255, 255)"
+                    ? "255 255 255"
                     : inputType === "hsl"
-                      ? "hsl(0, 0%, 100%)"
-                      : "oklch(1, 0, 0)"
+                      ? "0 0% 100%"
+                      : "1 0 0"
               }
               aria-label="Color input"
-              maxLength={inputType === "hex" ? 7 : 20}
+              maxLength={inputType === "hex" ? 6 : 20}
               spellCheck={false}
               autoComplete="off"
             />
