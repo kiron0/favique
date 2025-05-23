@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { MAX_FILE_SIZE, SUPPORTED_TYPES } from "@/utils"
+import { MAX_FILE_SIZE } from "@/utils"
 import { Loader2, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -66,7 +66,7 @@ export function Converter() {
         description: `Please select a file smaller than ${MAX_FILE_SIZE} MB.`,
       })
     }
-    if (!SUPPORTED_TYPES.includes(file.type)) {
+    if (file.type.includes("image/") === false) {
       updateState({ dragActive: false })
       return notifyError({
         title: "Unsupported file type",
@@ -201,7 +201,7 @@ export function Converter() {
                         Drag & drop an image here or
                       </p>
                       <p className="text-muted-foreground text-sm">
-                        Supports PNG, JPEG/JPG, WEBP, GIF, SVG (Max 5MB)
+                        Supports only image files (Max 5MB)
                       </p>
                     </div>
                   </label>

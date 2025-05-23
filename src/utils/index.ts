@@ -7,15 +7,6 @@ export * from "./menu"
 export * from "./sizes"
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
-export const SUPPORTED_TYPES = [
-  "image/png",
-  "image/jpeg",
-  "image/jpg",
-  "image/svg+xml",
-  "image/svg",
-  "image/webp",
-  "image/gif",
-]
 
 export const loadImage = (file: File): Promise<HTMLImageElement> => {
   return new Promise((resolve, reject) => {

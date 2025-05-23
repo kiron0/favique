@@ -2,6 +2,7 @@ import * as React from "react"
 import { HexColorPicker } from "react-colorful"
 
 import { cn } from "@/lib/utils"
+import { Input } from "@/components/ui/input"
 import {
   Popover,
   PopoverContent,
@@ -44,14 +45,29 @@ function ColorPicker({
         </button>
       </PopoverTrigger>
       <PopoverContent className="z-40 w-auto p-0">
-        <HexColorPicker
-          color={value}
-          onChange={(newColor) => {
-            onChange?.(newColor)
-          }}
-          aria-disabled={disabled}
-          className="min-w-[var(--radix-popover-trigger-width)]"
-        />
+        <div className="flex flex-col gap-4 p-4">
+          <HexColorPicker
+            color={value}
+            onChange={(newColor) => {
+              onChange?.(newColor)
+            }}
+            aria-disabled={disabled}
+            className="min-w-[var(--radix-popover-trigger-width)]"
+          />
+          <Input
+            type="text"
+            value={value}
+            onChange={(e) => onChange?.(e.target.value)}
+            disabled={disabled}
+            className="w-full uppercase"
+            placeholder="#ffffff"
+            aria-label="Hex color input"
+            maxLength={7}
+            pattern="#?[0-9A-Fa-f]{6}"
+            spellCheck={false}
+            autoComplete="off"
+          />
+        </div>
       </PopoverContent>
     </Popover>
   )
