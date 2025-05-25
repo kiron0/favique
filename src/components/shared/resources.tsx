@@ -22,10 +22,10 @@ const resources = [
     link: "/tutorials/how-to-add-a-favicon-to-a-website-png-format",
   },
   {
-    title: "Squarespace Favicon",
+    title: "SquareSpace Favicon",
     description:
-      "How do I add a custom favicon to my Squarespace website? And how to use it as a shortcut icon.",
-    link: "/tutorials/squarespace-favicon",
+      "How do I add a custom favicon to my SquareSpace website? And how to use it as a shortcut icon.",
+    link: "/tutorials/square-space-favicon",
   },
   {
     title: "Logo Generator",

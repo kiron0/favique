@@ -18,7 +18,7 @@ export function WhatIsAFavicon() {
         A favicon is a small icon or collection of icons associated with a
         website, web page, or web application. It&apos;s displayed within the
         browser tabs and bookmarks bar. The examples below show the favicons for
-        Google, Reddit, and Squarespace within the browser tab.
+        Google, Reddit, and SquareSpace within the browser tab.
       </p>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {images.map((image, index) => (
@@ -58,7 +58,7 @@ export function WhatIsAFavicon() {
         easily identify your site in their browser tabs and bookmarks.
       </p>
       <p>
-        Squarespace uses its logo as its favicon to stay consistent with the
+        SquareSpace uses its logo as its favicon to stay consistent with the
         company&apos;s brand.
       </p>
       <CustomImage

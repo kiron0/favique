@@ -22,10 +22,6 @@ import {
 
 import ALL_FONTS from "../../public/fonts.json"
 
-interface Font {
-  family: string
-}
-
 interface FontsSelectionProps {
   value: string
   onValueChange: (value: string) => void

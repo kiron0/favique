@@ -138,6 +138,7 @@ export function Logos() {
       saveAs(zipBlob, `${siteConfig.name}-logo-${Date.now()}.zip`)
       setLoading(false)
     } catch (error) {
+      console.log(error)
       return notifyError({
         title: "Error generating logo",
         description: "Please try again later.",
