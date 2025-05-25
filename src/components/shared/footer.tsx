@@ -41,9 +41,11 @@ export function Footer() {
     <footer className="bg-secondary mt-16 space-y-10 pb-10 md:mt-20">
       <div className="border-b" />
       <div className="mx-auto flex w-full max-w-7xl flex-col items-start justify-between gap-10 px-4 text-center lg:flex-row lg:text-left xl:px-0">
-        <div className="flex w-full shrink flex-col items-center justify-between gap-6 lg:max-w-96 lg:items-start">
+        <div className="flex w-full shrink flex-col items-center justify-between gap-6 lg:max-w-lg lg:items-start">
           <Logo className="lg:justify-start" />
-          <p className="text-muted-foreground text-sm">{siteConfig.slogan}</p>
+          <p className="text-muted-foreground text-sm">
+            {siteConfig.description}
+          </p>
         </div>
         <div className="mx-auto w-full space-y-2 sm:w-fit lg:mx-0">
           <div className="text-base font-semibold">Stay up to date</div>

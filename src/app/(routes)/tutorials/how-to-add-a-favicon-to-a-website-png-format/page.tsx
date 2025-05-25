@@ -1,5 +1,13 @@
+import { type Metadata } from "next"
+
 import { Banner } from "@/components/banner"
 import { TutorialsPng } from "@/components/shared/tutorials/tutorials-png"
+
+export const metadata: Metadata = {
+  title: "How to add a favicon to a website (PNG format)",
+  description:
+    "Learn how to add a favicon to your website in PNG format. This tutorial will guide you through the process step by step.",
+}
 
 export default function Page() {
   return (

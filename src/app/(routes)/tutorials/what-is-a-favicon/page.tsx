@@ -1,5 +1,13 @@
+import { type Metadata } from "next"
+
 import { Banner } from "@/components/banner"
 import { WhatIsAFavicon } from "@/components/shared/tutorials/what-is-a-favicon"
+
+export const metadata: Metadata = {
+  title: "What is a favicon?",
+  description:
+    "Learn what a favicon is, why it's important, and how to create one for your website.",
+}
 
 export default function Page() {
   return (
