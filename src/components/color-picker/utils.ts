@@ -16,8 +16,8 @@ function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
   const max = Math.max(rNorm, gNorm, bNorm)
   const min = Math.min(rNorm, gNorm, bNorm)
   let h = 0,
-    s = 0,
-    l = (max + min) / 2
+    s = 0
+  const l = (max + min) / 2
   if (max !== min) {
     const d = max - min
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
