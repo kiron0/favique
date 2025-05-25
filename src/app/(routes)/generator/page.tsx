@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { Generator } from "@/components/generator"
+import { Generator } from "@/components/shared/generator"
 
 export const metadata: Metadata = {
   title: "Favicon Generator - Text to Favicon",

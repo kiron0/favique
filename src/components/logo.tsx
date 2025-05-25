@@ -16,10 +16,11 @@ function Logo({ href, className }: LogoProps) {
     <>
       <CustomImage
         src={siteConfig.logo}
-        width={24}
-        height={24}
+        width={512}
+        height={512}
         alt={siteConfig.name}
         priority
+        className="w-6 rounded-sm object-cover md:w-7"
       />
       <span className="text-xl font-semibold md:text-2xl">
         {siteConfig.name}

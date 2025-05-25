@@ -9,8 +9,7 @@ import TutorialsImg from "@/assets/tutorials.png"
 
 import { Banner } from "@/components/banner"
 import { CustomImage } from "@/components/custom-image"
-
-import { Resources } from "../resources"
+import { Resources } from "@/components/shared/resources"
 
 interface MenuItem {
   name: string

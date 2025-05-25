@@ -7,25 +7,25 @@ const resources = [
     title: "What is a favicon?",
     description:
       "What is a favicon, why do I need one, and how can I generate one?",
-    link: "/coming-soon",
+    link: "/tutorials/what-is-a-favicon",
   },
   {
     title: "Install: favicon.ico",
     description:
       "How to install your favicon.ico file on your website. And how to use it as a shortcut icon.",
-    link: "/coming-soon",
+    link: "/tutorials/how-to-add-a-favicon-to-a-website-ico-format",
   },
   {
     title: "Install: favicon.png",
     description:
       "How to install your favicon.png file on your website. And how to use it as a shortcut icon.",
-    link: "/coming-soon",
+    link: "/tutorials/how-to-add-a-favicon-to-a-website-png-format",
   },
   {
     title: "Squarespace Favicon",
     description:
       "How do I add a custom favicon to my Squarespace website? And how to use it as a shortcut icon.",
-    link: "/coming-soon",
+    link: "/tutorials/squarespace-favicon",
   },
   {
     title: "Logo Generator",

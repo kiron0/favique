@@ -135,7 +135,7 @@ function ColorPicker({
               className="w-full uppercase"
               placeholder={
                 inputType === "hex"
-                  ? "FFFFFF"
+                  ? "#FFFFFF"
                   : inputType === "rgb"
                     ? "255 255 255"
                     : inputType === "hsl"
@@ -143,7 +143,7 @@ function ColorPicker({
                       : "1 0 0"
               }
               aria-label="Color input"
-              maxLength={inputType === "hex" ? 6 : 20}
+              maxLength={inputType === "hex" ? 7 : 20}
               spellCheck={false}
               autoComplete="off"
             />

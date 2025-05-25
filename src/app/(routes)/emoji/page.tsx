@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { Emoji } from "@/components/emoji"
+import { Emoji } from "@/components/shared/emoji"
 
 export const metadata: Metadata = {
   title: "Favicon Generator - Emoji to Favicon",

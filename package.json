@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write \"**/*.{ts,tsx,js,json,css}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,css}\"",
     "upgrade": "bunx --bun ncu -u && bun install",
     "push": "git add . && git commit -m \"chore update\" && git push"
   },
@@ -45,7 +45,7 @@
     "zod": "^3.25.23"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
+    "@eslint/eslintrc": "^3.3.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
     "@tailwindcss/postcss": "^4",
     "@types/file-saver": "^2.0.7",
@@ -53,8 +53,9 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/webfontloader": "^1.6.38",
-    "eslint": "^9",
+    "eslint": "^9.27.0",
     "eslint-config-next": "15.3.2",
+    "eslint-config-prettier": "^10.1.5",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4",

@@ -16,6 +16,7 @@ function CustomImage({ className, ...props }: CustomImageProps) {
       draggable={false}
       onContextMenu={(e) => e.preventDefault()}
       {...props}
+      alt={props.alt || "Custom Image"}
     />
   )
 }

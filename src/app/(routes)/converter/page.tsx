@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { Converter } from "@/components/converter"
+import { Converter } from "@/components/shared/converter"
 
 export const metadata: Metadata = {
   title: "Favicon Generator - Image to Favicon",

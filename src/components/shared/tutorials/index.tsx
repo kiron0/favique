@@ -12,7 +12,7 @@ const tutorials = [
     items: [
       {
         title: "What is a favicon?",
-        link: "/coming-soon",
+        link: "/tutorials/what-is-a-favicon",
       },
     ],
   },
@@ -23,11 +23,11 @@ const tutorials = [
     items: [
       {
         title: "How to add a favicon to a website - ICO format",
-        link: "/coming-soon",
+        link: "/tutorials/how-to-add-a-favicon-to-a-website-ico-format",
       },
       {
         title: "How to add a favicon to a website - PNG format",
-        link: "/coming-soon",
+        link: "/tutorials/how-to-add-a-favicon-to-a-website-png-format",
       },
     ],
   },

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { Tutorials } from "@/components/tutorials"
+import { Tutorials } from "@/components/shared/tutorials"
 
 export const metadata: Metadata = {
   title: "Tutorials",
