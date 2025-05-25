@@ -123,10 +123,6 @@ export function oklchToOklab(
   return [L, C * Math.cos(hRad), C * Math.sin(hRad)]
 }
 
-function hexToHexString(hex: string): string {
-  return hex.replace(/^#/, "").toUpperCase()
-}
-
 function hexToRgbString(hex: string): string {
   const rgb = hexToRgb(hex)
   return rgb ? `${rgb[0]} ${rgb[1]} ${rgb[2]}` : ""
@@ -148,8 +144,8 @@ function hexToOklchString(hex: string): string {
 }
 
 export function parseHexString(hexStr: string): string | null {
-  if (!/^[0-9a-fA-F]{6}$/.test(hexStr)) return null
-  return `#${hexStr.toUpperCase()}`
+  if (!/^#[0-9a-fA-F]{6}$/.test(hexStr)) return null
+  return hexStr.toUpperCase()
 }
 
 export function parseRgbString(
@@ -189,7 +185,7 @@ export function parseOklchString(
 }
 
 export function getInputValue(inputType: string, value: string): string {
-  if (inputType === "hex") return hexToHexString(value)
+  if (inputType === "hex") return value
   if (inputType === "rgb") return hexToRgbString(value)
   if (inputType === "hsl") return hexToHslString(value)
   if (inputType === "oklch") return hexToOklchString(value)
