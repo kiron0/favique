@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { Logos } from "@/components/logos"
+import { Logos } from "@/components/shared/logos"
 
 export const metadata: Metadata = {
   title: "The best Logo Generator (completely free)",

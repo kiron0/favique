@@ -56,7 +56,7 @@ export function useFaviconGenerator(
     if (typeof window !== "undefined" && !canvasRef.current) {
       canvasRef.current = document.createElement("canvas")
     }
-  }, [])
+  }, [canvasRef])
 
   const generateFaviconPack = async (
     canvas: HTMLCanvasElement | null,
@@ -189,7 +189,7 @@ export function useFaviconGenerator(
     const textIcon = generator.generate(payload)
     const url = textIcon.toDataURL()
     setImg(url)
-  }, [form, fontVariants])
+  }, [canvasRef, form, fontVariants])
 
   React.useEffect(() => {
     if (typeof window !== "undefined" && canvasRef.current) {
@@ -197,7 +197,7 @@ export function useFaviconGenerator(
       const subscription = form.watch(() => updateCanvas())
       return () => subscription.unsubscribe()
     }
-  }, [form, updateCanvas])
+  }, [canvasRef, form, updateCanvas])
 
   return {
     img,

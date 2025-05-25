@@ -47,7 +47,7 @@ export function Emoji() {
       const group = emoji.group?.toString()
       return group === selectedGroup
     }) as EmojiProps[]
-  }, [emojis, selectedGroup])
+  }, [selectedGroup])
 
   return (
     <div className="space-y-4 pb-2 md:space-y-6 lg:space-y-8">

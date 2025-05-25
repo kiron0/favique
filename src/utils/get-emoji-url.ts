@@ -1,9 +1,8 @@
 import { Emoji } from "emojibase"
 
 export function getEmojiUrl(emoji: Emoji, format = "svg") {
-  let url
   let folder = "svg"
-  let hex = emoji.hexcode
+  const hex = emoji.hexcode
 
   let code = hex.toLowerCase()
 
@@ -23,7 +22,7 @@ export function getEmojiUrl(emoji: Emoji, format = "svg") {
     folder = "72x72"
   }
 
-  url = `https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/${folder}/${code}.${format}`
+  const url = `https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/${folder}/${code}.${format}`
 
   return url
 }

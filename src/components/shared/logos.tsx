@@ -36,7 +36,7 @@ import { CustomImage } from "@/components/custom-image"
 import { FontsSelection } from "@/components/fonts-selection"
 import { notifyError } from "@/components/toast"
 
-import Fonts from "../../public/fonts.json"
+import Fonts from "../../../public/fonts.json"
 
 const generateRandomColor = (useWhiteBias = true): string => {
   if (useWhiteBias && Math.random() < 0.8) return "#FFFFFF"

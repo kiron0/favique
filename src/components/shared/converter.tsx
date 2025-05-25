@@ -234,7 +234,7 @@ export function Converter() {
                   </Label>
                   <p className="text-muted-foreground text-xs">
                     This will add the site name and short name to the web
-                    manifest file. If you don't want to add it, leave it
+                    manifest file. If you don&apos;t want to add it, leave it
                     unchecked.
                   </p>
                 </div>

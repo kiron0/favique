@@ -31,12 +31,13 @@ export function Navbar() {
             <div className="flex items-center">
               <div className="relative flex max-w-max flex-1 items-center justify-center">
                 <div className="group flex flex-1 list-none items-center justify-center gap-1">
-                  {menuItems.map((item) =>
-                    renderMenuItem({
-                      item,
-                      setOpen,
-                    })
-                  )}
+                  {menuItems.map((item) => (
+                    <RenderMenuItem
+                      item={item}
+                      setOpen={setOpen}
+                      key={item.title}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
@@ -84,12 +85,13 @@ export function Navbar() {
                       className="group/navigation-menu relative flex max-w-max flex-1 items-center justify-center"
                     >
                       <div className="group flex flex-1 list-none flex-col items-start justify-center gap-2">
-                        {menuItems.map((item) =>
-                          renderMenuItem({
-                            item,
-                            setOpen,
-                          })
-                        )}
+                        {menuItems.map((item) => (
+                          <RenderMenuItem
+                            item={item}
+                            setOpen={setOpen}
+                            key={item.title}
+                          />
+                        ))}
                       </div>
                     </div>
                     <div className="flex flex-col gap-3">
@@ -123,7 +125,7 @@ export function Navbar() {
   )
 }
 
-const renderMenuItem = ({
+const RenderMenuItem = ({
   item,
   setOpen,
 }: {

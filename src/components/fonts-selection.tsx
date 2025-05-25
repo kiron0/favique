@@ -20,6 +20,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+import ALL_FONTS from "../../public/fonts.json"
+
 interface Font {
   family: string
 }
@@ -30,7 +32,6 @@ interface FontsSelectionProps {
 }
 
 const PAGE_SIZE = 50
-const ALL_FONTS: Font[] = require("../../public/fonts.json")
 
 export function FontsSelection({ value, onValueChange }: FontsSelectionProps) {
   const [open, setOpen] = React.useState(false)
