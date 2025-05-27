@@ -71,6 +71,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7767850897360933"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className={cn("antialiased", concertOne.className)}>
         <Providers>{children}</Providers>
       </body>

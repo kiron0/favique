@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import { siteConfig } from "@/config"
 
 import { Button } from "@/components/ui/button"
@@ -90,11 +91,11 @@ export function Footer() {
         </p>
         <ul className="flex justify-center gap-4 lg:justify-start">
           <li className="text-primary underline hover:no-underline">
-            <a href="#"> Terms and Conditions</a>
+            <Link href="/terms-of-use"> Terms and Use</Link>
           </li>
           <span className="text-muted-foreground">|</span>
           <li className="text-primary underline hover:no-underline">
-            <a href="#"> Privacy Policy</a>
+            <Link href="/privacy-policy"> Privacy Policy</Link>
           </li>
         </ul>
       </div>

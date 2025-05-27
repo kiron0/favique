@@ -7,6 +7,7 @@ import Tutorials8 from "@/assets/tutorials/tutorials-8.png"
 import Tutorials9 from "@/assets/tutorials/tutorials-9.png"
 import Tutorials10 from "@/assets/tutorials/tutorials-10.png"
 import Tutorials11 from "@/assets/tutorials/tutorials-11.png"
+import { siteConfig } from "@/config"
 
 import { CustomImage } from "@/components/custom-image"
 
@@ -43,9 +44,10 @@ export function SquareSpace() {
           favicon converter
         </Link>{" "}
         before continuing. For this guide any square image in PNG or ICO format
-        will work. If you used one of the favicon.io favicon generators then we
-        recommend using the android-chrome-512x512.png file. Below is the custom
-        favicon we&apos;ve chosen for our SquareSpace website.
+        will work. If you used one of the {siteConfig.name.toLowerCase()}{" "}
+        favicon generators then we recommend using the
+        android-chrome-512x512.png file. Below is the custom favicon we&apos;ve
+        chosen for our SquareSpace website.
       </p>
       <CustomImage
         src={Tutorials7.src}
@@ -57,14 +59,14 @@ export function SquareSpace() {
         height={Tutorials7.height}
       />
       <h1 className="text-xl font-bold md:text-2xl">
-        Note: Limitions with SquareSpace
+        Note: Limitations with SquareSpace
       </h1>
       <p>
         SquareSpace has limitations with adding custom favicons. SquareSpace
         allows for only one image to be uploaded. This means that you can&apos;t
         have multiple sizes or favicon variations for specific browsers. Due to
-        these limitions favicon.io recommends using a large, square image, in
-        PNG format.
+        these limitations {siteConfig.name.toLowerCase()} recommends using a
+        large, square image, in PNG format.
       </p>
       <h1 className="text-xl font-bold md:text-2xl">
         Step 2: Navigate to the Design Section
