@@ -73,7 +73,7 @@ export function Footer() {
       <div className="mx-auto w-full max-w-7xl space-y-2 px-4 text-center lg:px-0">
         <h2 className="text-lg font-semibold">Built with</h2>
         <div className="text-muted-foreground text-sm">
-          {siteConfig.name} is built with{" "}
+          {siteConfig.capitalizeName} is built with{" "}
           <a
             href="https://www.npmjs.com/package/favium"
             target="_blank"
@@ -86,8 +86,8 @@ export function Footer() {
       </div>
       <div className="text-muted-foreground mx-auto flex w-full max-w-7xl flex-col-reverse justify-between gap-4 px-4 text-center text-sm font-medium md:flex-col lg:flex-row lg:items-center lg:text-left xl:px-0">
         <p>
-          &copy; {new Date().getFullYear()} {siteConfig.name}. All rights
-          reserved.
+          &copy; {new Date().getFullYear()} {siteConfig.capitalizeName}. All
+          rights reserved.
         </p>
         <ul className="flex justify-center gap-4 lg:justify-start">
           <li className="text-primary underline hover:no-underline">

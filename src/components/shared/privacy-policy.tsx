@@ -50,11 +50,12 @@ export function PrivacyPolicy() {
               Aggregated Statistics
             </h1>
             <p>
-              {siteConfig.name} may collect statistics about the behavior of
-              visitors to its website. For instance, Favicon.io may monitor the
-              most popular pages on favicon.io. Favicon.io may display this
-              information publicly or provide it to others. However, Favicon.io
-              does not disclose personally-identifying information.
+              {siteConfig.capitalizeName} may collect statistics about the
+              behavior of visitors to its website. For instance, Favicon.io may
+              monitor the most popular pages on favicon.io. Favicon.io may
+              display this information publicly or provide it to others.
+              However, Favicon.io does not disclose personally-identifying
+              information.
             </p>
             <h1 className="text-xl font-bold md:text-2xl">Cookies</h1>
             <p>
