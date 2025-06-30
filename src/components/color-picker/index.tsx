@@ -56,7 +56,7 @@ function ColorPicker({
     } else if (inputType === "rgb") {
       const rgb = parseRgbString(val)
       if (rgb) {
-        const hex = rgbToHex(...rgb)
+        const hex = rgbToHex(rgb[0], rgb[1], rgb[2], rgb[3])
         onChange?.(hex)
       } else {
         onChange?.(value)
@@ -65,7 +65,7 @@ function ColorPicker({
       const hsl = parseHslString(val)
       if (hsl) {
         const rgb = hslToRgb(...hsl)
-        const hex = rgbToHex(...rgb)
+        const hex = rgbToHex(rgb[0], rgb[1], rgb[2])
         onChange?.(hex)
       } else {
         onChange?.(value)
@@ -76,7 +76,7 @@ function ColorPicker({
         const [L, C, H] = oklch
         const [L_ok, a, b] = oklchToOklab(L, C, H)
         const rgb = oklabToRgb(L_ok, a, b)
-        const hex = rgbToHex(...rgb)
+        const hex = rgbToHex(rgb[0], rgb[1], rgb[2])
         onChange?.(hex)
       } else {
         onChange?.(value)
@@ -129,7 +129,7 @@ function ColorPicker({
             </Select>
             <Input
               type="text"
-              value={getInputValue(inputType, value)}
+              value={getInputValue(inputType, value) || ""}
               onChange={handleInputChange}
               disabled={disabled}
               className="w-full uppercase"
