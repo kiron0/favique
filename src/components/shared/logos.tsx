@@ -66,6 +66,7 @@ export function Logos() {
     svg: null,
   })
   const [loading, setLoading] = React.useState(false)
+  const [randomizing, setRandomizing] = React.useState(false)
 
   const form = useForm<LogoFormSchema>({
     resolver: zodResolver(logoFormSchema),
@@ -231,17 +232,55 @@ export function Logos() {
     })
   }, [form])
 
-  const handleRandomize = React.useCallback(() => {
-    const randomValues = generateRandomLogo()
+  const handleRandomize = React.useCallback(async () => {
+    if (randomizing) return
 
-    Object.entries(randomValues).forEach(([key, value]) => {
-      form.setValue(key as keyof LogoFormSchema, value, { shouldDirty: true })
-    })
-  }, [form, generateRandomLogo])
+    setRandomizing(true)
+
+    try {
+      const randomValues = generateRandomLogo()
+
+      Object.entries(randomValues).forEach(([key, value]) => {
+        form.setValue(key as keyof LogoFormSchema, value, {
+          shouldDirty: true,
+          shouldTouch: true,
+          shouldValidate: true,
+        })
+      })
+
+      await form.trigger()
+
+      setTimeout(() => {
+        updateCanvas()
+      }, 0)
+    } finally {
+      setRandomizing(false)
+    }
+  }, [form, generateRandomLogo, updateCanvas, randomizing])
 
   React.useEffect(() => {
     form.reset(generateRandomLogo())
   }, [form, generateRandomLogo])
+
+  React.useEffect(() => {
+    const currentFontFamily = form.getValues("fontFamily")
+    const currentFontWeight = form.getValues("fontWeight")
+
+    const fontInfo = Fonts.find((font) => font.family === currentFontFamily)
+    const availableVariants = fontInfo?.variants || []
+
+    const isCurrentWeightAvailable = availableVariants.some(
+      (variant) => variant.name === currentFontWeight
+    )
+
+    if (!isCurrentWeightAvailable && availableVariants.length > 0) {
+      form.setValue("fontWeight", availableVariants[0].name, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      })
+    }
+  }, [selectedFontFamily, form])
 
   React.useEffect(() => {
     if (typeof window === "undefined") return
@@ -454,10 +493,21 @@ export function Logos() {
                         variant="outline"
                         type="button"
                         onClick={handleRandomize}
-                        disabled={loading || form.formState.isSubmitting}
+                        disabled={
+                          loading || randomizing || form.formState.isSubmitting
+                        }
                       >
-                        <Shuffle className="h-4 w-4" />
-                        Randomize
+                        {randomizing ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Randomizing...
+                          </>
+                        ) : (
+                          <>
+                            <Shuffle className="h-4 w-4" />
+                            Randomize
+                          </>
+                        )}
                       </Button>
                       <Button type="submit" disabled={loading}>
                         {loading ? (
