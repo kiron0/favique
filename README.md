@@ -1,4 +1,3 @@
-### Favique - a favicon generator
 # Favique - Favicon Generator
 
 Favique is a modern favicon generator that allows you to create a complete favicon pack for your website with a single click. Built with [favium](https://www.npmjs.com/package/favium), Next.js, and Tailwind CSS, Favique makes it easy for web developers and designers to generate, customize, and download favicons in all the required formats.
