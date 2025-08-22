@@ -16,13 +16,13 @@ export function SquareSpace() {
         SquareSpace website.
       </p>
       <CustomImage
-        src="assets/tutorials/tutorials-6.png"
+        src="/assets/tutorials/tutorials-6.png"
         placeholder="blur"
-        blurDataURL="assets/tutorials/tutorials-6.png"
-        alt="SquareSpace Design Settings"
+        blurDataURL="/assets/tutorials/tutorials-6.png"
+        alt="Favicon examples"
+        className="w-full rounded-md border"
         width={1920}
         height={1080}
-        className="rounded-lg"
       />
       <h1 className="text-xl font-bold md:text-2xl">
         Step 1: Prepare your Favicon
@@ -43,13 +43,13 @@ export function SquareSpace() {
         the custom favicon we&apos;ve chosen for our SquareSpace website.
       </p>
       <CustomImage
-        src="assets/tutorials/tutorials-7.png"
+        src="/assets/tutorials/tutorials-7.png"
         placeholder="blur"
-        blurDataURL="assets/tutorials/tutorials-7.png"
-        alt="SquareSpace Browser Icon Section"
+        blurDataURL="/assets/tutorials/tutorials-7.png"
+        alt="Favicon examples"
+        className="w-full max-w-xs rounded-md border"
         width={1920}
         height={1080}
-        className="rounded-lg"
       />
       <h1 className="text-xl font-bold md:text-2xl">
         Note: Limitations with SquareSpace
@@ -69,13 +69,13 @@ export function SquareSpace() {
         &quot;Design&quot; link on the left hand side navigation.
       </p>
       <CustomImage
-        src="assets/tutorials/tutorials-8.png"
+        src="/assets/tutorials/tutorials-8.png"
         placeholder="blur"
-        blurDataURL="assets/tutorials/tutorials-8.png"
-        alt="SquareSpace Browser Icon Upload"
+        blurDataURL="/assets/tutorials/tutorials-8.png"
+        alt="Favicon examples"
+        className="w-full rounded-md border"
         width={1920}
         height={1080}
-        className="rounded-lg"
       />
       <h1 className="text-xl font-bold md:text-2xl">
         Step 3: Navigate to the Browser Icon Section
@@ -85,13 +85,13 @@ export function SquareSpace() {
         left hand side navigation.
       </p>
       <CustomImage
-        src="assets/tutorials/tutorials-9.png"
+        src="/assets/tutorials/tutorials-9.png"
         placeholder="blur"
-        blurDataURL="assets/tutorials/tutorials-9.png"
-        alt="SquareSpace Favicon Upload"
+        blurDataURL="/assets/tutorials/tutorials-9.png"
+        alt="Favicon examples"
+        className="w-full rounded-md border"
         width={1920}
         height={1080}
-        className="rounded-lg"
       />
       <h1 className="text-xl font-bold md:text-2xl">
         Step 4: Upload your Favicon Image
@@ -105,13 +105,13 @@ export function SquareSpace() {
         click the save button.
       </p>
       <CustomImage
-        src="assets/tutorials/tutorials-10.png"
+        src="/assets/tutorials/tutorials-10.png"
         placeholder="blur"
-        blurDataURL="assets/tutorials/tutorials-10.png"
-        alt="SquareSpace Favicon Preview"
+        blurDataURL="/assets/tutorials/tutorials-10.png"
+        alt="Favicon examples"
+        className="w-full rounded-md border"
         width={1920}
         height={1080}
-        className="rounded-lg"
       />
       <h1 className="text-xl font-bold md:text-2xl">
         Step 5: Preview your Browser Icon
@@ -122,13 +122,13 @@ export function SquareSpace() {
         tab.
       </p>
       <CustomImage
-        src="assets/tutorials/tutorials-11.png"
+        src="/assets/tutorials/tutorials-11.png"
         placeholder="blur"
-        blurDataURL="assets/tutorials/tutorials-11.png"
-        alt="SquareSpace Favicon Success"
+        blurDataURL="/assets/tutorials/tutorials-11.png"
+        alt="Favicon examples"
+        className="w-full rounded-md border"
         width={1920}
         height={1080}
-        className="rounded-lg"
       />
     </div>
   )

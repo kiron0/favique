@@ -2,10 +2,6 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
-  output: "export",
-  trailingSlash: true,
-  basePath: "/favique",
-  assetPrefix: "/favique",
   images: {
     remotePatterns: [
       {
@@ -13,7 +9,6 @@ const nextConfig: NextConfig = {
         hostname: "**",
       },
     ],
-    unoptimized: true,
   },
 }
 

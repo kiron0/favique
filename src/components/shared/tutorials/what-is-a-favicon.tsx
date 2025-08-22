@@ -37,9 +37,9 @@ export function WhatIsAFavicon() {
         within the Chrome bookmarks bar.
       </p>
       <CustomImage
-        src="assets/tutorials/tutorials-4.png"
+        src="/assets/tutorials/tutorials-4.png"
         placeholder="blur"
-        blurDataURL="assets/tutorials/tutorials-4.png"
+        blurDataURL="/assets/tutorials/tutorials-4.png"
         alt="Favicon examples"
         className="w-full rounded-md border"
         width={1920}
@@ -60,10 +60,10 @@ export function WhatIsAFavicon() {
         company&apos;s brand.
       </p>
       <CustomImage
-        src="assets/tutorials/tutorials-5.png"
+        src="/assets/tutorials/tutorials-5.png"
         placeholder="blur"
-        blurDataURL="assets/tutorials/tutorials-5.png"
-        alt="Favicon in browser tab"
+        blurDataURL="/assets/tutorials/tutorials-5.png"
+        alt="Favicon examples"
         className="w-full rounded-md border"
         width={1920}
         height={1080}

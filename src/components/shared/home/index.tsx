@@ -18,35 +18,35 @@ const menuItems: MenuItem[] = [
   {
     name: "Image",
     path: "/converter",
-    img: "assets/image.png",
+    img: "/assets/image.png",
     description:
       "If you already have an image or logo that you want to use for your favicon then use this tool to convert your image to the proper favicon format.",
   },
   {
     name: "Text",
     path: "/generator",
-    img: "assets/text.png",
+    img: "/assets/text.png",
     description:
       "If you don't have a logo or image for your website and want to generate a favicon from scratch then use this tool to generate your favicon.",
   },
   {
     name: "Emoji",
     path: "/emoji",
-    img: "assets/emoji.png",
+    img: "/assets/emoji.png",
     description:
       "Want to use an emoji for your favicon? Choose from a list of hundreds of emojis to generate a favicon for your website.",
   },
   {
     name: "Logos",
     path: "/logos",
-    img: "assets/logos.png",
+    img: "/assets/logos.png",
     description:
       "Don't have a logo or image for your website and want to generate a favicon from scratch then use this tool to generate your favicon.",
   },
   {
     name: "Tutorials",
     path: "/tutorials",
-    img: "assets/tutorials.png",
+    img: "/assets/tutorials.png",
     description:
       "Want to learn how to install a favicon on your website? Interested in how the .ico format works? We've created easy, but comprehensive tutorials!",
   },
