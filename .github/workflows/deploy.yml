@@ -57,8 +57,17 @@ jobs:
           NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
         run: bun run build
 
+      - name: Verify build output
+        run: |
+          echo "Build output contents:"
+          ls -la ./out
+          echo "Checking for index.html:"
+          test -f ./out/index.html && echo "✅ index.html found" || echo "❌ index.html missing"
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        with:
+          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
