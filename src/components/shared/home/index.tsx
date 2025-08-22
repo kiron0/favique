@@ -2,11 +2,6 @@
 
 import { Route } from "next"
 import Link from "next/link"
-import EmojiImg from "@/assets/emoji.png"
-import ConverterImg from "@/assets/image.png"
-import LogosImg from "@/assets/logos.png"
-import GeneratorImg from "@/assets/text.png"
-import TutorialsImg from "@/assets/tutorials.png"
 
 import { Banner } from "@/components/banner"
 import { CustomImage } from "@/components/custom-image"
@@ -15,12 +10,7 @@ import { Resources } from "@/components/shared/resources"
 interface MenuItem {
   name: string
   path: string
-  img: {
-    src: string
-    width?: number
-    height?: number
-    blurDataURL?: string
-  }
+  img: string
   description: string
 }
 
@@ -28,35 +18,35 @@ const menuItems: MenuItem[] = [
   {
     name: "Image",
     path: "/converter",
-    img: ConverterImg,
+    img: "/assets/image.png",
     description:
       "If you already have an image or logo that you want to use for your favicon then use this tool to convert your image to the proper favicon format.",
   },
   {
     name: "Text",
     path: "/generator",
-    img: GeneratorImg,
+    img: "/assets/text.png",
     description:
       "If you don't have a logo or image for your website and want to generate a favicon from scratch then use this tool to generate your favicon.",
   },
   {
     name: "Emoji",
     path: "/emoji",
-    img: EmojiImg,
+    img: "/assets/emoji.png",
     description:
       "Want to use an emoji for your favicon? Choose from a list of hundreds of emojis to generate a favicon for your website.",
   },
   {
     name: "Logos",
     path: "/logos",
-    img: LogosImg,
+    img: "/assets/logos.png",
     description:
       "Don't have a logo or image for your website and want to generate a favicon from scratch then use this tool to generate your favicon.",
   },
   {
     name: "Tutorials",
     path: "/tutorials",
-    img: TutorialsImg,
+    img: "/assets/tutorials.png",
     description:
       "Want to learn how to install a favicon on your website? Interested in how the .ico format works? We've created easy, but comprehensive tutorials!",
   },
@@ -80,12 +70,12 @@ export function Home() {
                 className="flex flex-col items-center overflow-hidden rounded-xl border shadow-sm transition-shadow duration-300 hover:shadow-md"
               >
                 <CustomImage
-                  src={item.img.src}
+                  src={item.img}
                   className="h-36 w-full object-cover md:h-40 lg:h-44"
-                  width={item.img.width}
-                  height={item.img.height}
+                  width={1920}
+                  height={1080}
                   placeholder="blur"
-                  blurDataURL={item.img.blurDataURL}
+                  blurDataURL={item.img}
                   alt={item.name}
                 />
                 <div className="flex flex-col justify-center gap-2 p-4">

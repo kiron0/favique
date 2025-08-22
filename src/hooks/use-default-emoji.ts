@@ -1,5 +1,4 @@
 import * as React from "react"
-import DefaultImg from "@/assets/default.png"
 import { getEmojiUrl } from "@/utils"
 import { Emoji } from "emojibase"
 
@@ -15,12 +14,12 @@ export function useDefaultEmoji(emoji: Emoji) {
       setSrc(imageUrl)
     }
     img.onerror = () => {
-      setSrc(DefaultImg.src)
+      setSrc("/assets/default.png")
     }
     return () => {
       setSrc(null)
     }
   }, [emoji])
 
-  return src || DefaultImg.src
+  return src || "/assets/default.png"
 }

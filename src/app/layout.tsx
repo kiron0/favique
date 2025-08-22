@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Concert_One } from "next/font/google"
 import { siteConfig } from "@/config"
 import { Providers } from "@/providers"
@@ -7,15 +7,23 @@ import { cn } from "@/lib/utils"
 
 import "@/styles/globals.css"
 
-import { getBaseURL } from "@/utils"
-
 const concertOne = Concert_One({
   weight: ["400"],
   subsets: ["latin"],
 })
 
-export async function generateMetadata(): Promise<Metadata> {
-  const BASE_URL = await getBaseURL()
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+}
+
+export function generateMetadata(): Metadata {
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    (process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000")
 
   return {
     title: {
@@ -32,6 +40,26 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     ],
     creator: siteConfig.author.name,
+    publisher: siteConfig.author.name,
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    alternates: {
+      canonical: BASE_URL,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
     openGraph: {
       type: "website",
       locale: "en_US",
@@ -45,6 +73,7 @@ export async function generateMetadata(): Promise<Metadata> {
           width: 1200,
           height: 630,
           alt: siteConfig.name,
+          type: "image/png",
         },
       ],
     },
@@ -54,13 +83,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description: siteConfig.description,
       images: [new URL(siteConfig.ogImage, BASE_URL)],
       creator: siteConfig.links.twitter,
+      site: siteConfig.links.twitter,
     },
     icons: {
       icon: "/favicon.ico",
       shortcut: "/favicon-16x16.png",
       apple: "/apple-touch-icon.png",
     },
-    manifest: `${BASE_URL}/site.webmanifest`,
   }
 }
 

@@ -1,14 +1,12 @@
 "use client"
 
-import Tutorials1 from "@/assets/tutorials/tutorials-1.png"
-import Tutorials2 from "@/assets/tutorials/tutorials-2.png"
-import Tutorials3 from "@/assets/tutorials/tutorials-3.png"
-import Tutorials4 from "@/assets/tutorials/tutorials-4.png"
-import Tutorials5 from "@/assets/tutorials/tutorials-5.png"
-
 import { CustomImage } from "@/components/custom-image"
 
-const images = [Tutorials1, Tutorials2, Tutorials3]
+const images = [
+  "/assets/tutorials/tutorials-1.png",
+  "/assets/tutorials/tutorials-2.png",
+  "/assets/tutorials/tutorials-3.png",
+]
 
 export function WhatIsAFavicon() {
   return (
@@ -24,13 +22,13 @@ export function WhatIsAFavicon() {
         {images.map((image, index) => (
           <CustomImage
             key={index}
-            src={image.src}
+            src={image}
             placeholder="blur"
-            blurDataURL={image.blurDataURL}
+            blurDataURL={image}
             alt="Favicon examples"
             className="w-full rounded-md border"
-            width={image.width}
-            height={image.height}
+            width={1920}
+            height={1080}
           />
         ))}
       </div>
@@ -39,13 +37,13 @@ export function WhatIsAFavicon() {
         within the Chrome bookmarks bar.
       </p>
       <CustomImage
-        src={Tutorials4.src}
+        src="/assets/tutorials/tutorials-4.png"
         placeholder="blur"
-        blurDataURL={Tutorials4.blurDataURL}
+        blurDataURL="/assets/tutorials/tutorials-4.png"
         alt="Favicon examples"
         className="w-full rounded-md border"
-        width={Tutorials4.width}
-        height={Tutorials4.height}
+        width={1920}
+        height={1080}
       />
       <h1 className="text-xl font-bold md:text-2xl">
         What is a favicon used for?
@@ -62,13 +60,13 @@ export function WhatIsAFavicon() {
         company&apos;s brand.
       </p>
       <CustomImage
-        src={Tutorials5.src}
+        src="/assets/tutorials/tutorials-5.png"
         placeholder="blur"
-        blurDataURL={Tutorials5.blurDataURL}
+        blurDataURL="/assets/tutorials/tutorials-5.png"
         alt="Favicon examples"
         className="w-full rounded-md border"
-        width={Tutorials5.width}
-        height={Tutorials5.height}
+        width={1920}
+        height={1080}
       />
       <h1 className="text-xl font-bold md:text-2xl">
         What are alternative names for favicon?

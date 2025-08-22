@@ -1,4 +1,3 @@
-export * from "./base-url"
 export * from "./get-emoji-url"
 export * from "./img-to-url"
 export * from "./load-fonts"
@@ -6,7 +5,7 @@ export * from "./manifest"
 export * from "./menu"
 export * from "./sizes"
 
-export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+export const MAX_FILE_SIZE = 15 * 1024 * 1024 // 15MB
 
 export const loadImage = (file: File): Promise<HTMLImageElement> => {
   return new Promise((resolve, reject) => {
