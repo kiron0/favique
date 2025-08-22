@@ -1,5 +1,6 @@
 "use client"
 
+import { Route } from "next"
 import Link from "next/link"
 
 const resources = [
@@ -43,7 +44,7 @@ export function Resources() {
         {resources.map((item, i) => (
           <Link
             key={i}
-            href={item.link}
+            href={item.link as Route}
             className="flex flex-col items-center overflow-hidden rounded-xl border shadow-sm transition-shadow duration-300 hover:shadow-md"
           >
             <div className="flex flex-col justify-center gap-2 p-4">

@@ -1,5 +1,6 @@
 "use client"
 
+import { Route } from "next"
 import Link from "next/link"
 import EmojiImg from "@/assets/emoji.png"
 import ConverterImg from "@/assets/image.png"
@@ -75,7 +76,7 @@ export function Home() {
             {menuItems.map((item) => (
               <Link
                 key={item.name}
-                href={item.path}
+                href={item.path as Route}
                 className="flex flex-col items-center overflow-hidden rounded-xl border shadow-sm transition-shadow duration-300 hover:shadow-md"
               >
                 <CustomImage

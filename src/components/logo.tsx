@@ -1,5 +1,6 @@
 "use client"
 
+import { Route } from "next"
 import Link from "next/link"
 import { siteConfig } from "@/config"
 
@@ -29,7 +30,10 @@ function Logo({ href, className }: LogoProps) {
   )
 
   return href ? (
-    <Link href={href} className={cn("flex items-center gap-2", className)}>
+    <Link
+      href={href as Route}
+      className={cn("flex items-center gap-2", className)}
+    >
       {content}
     </Link>
   ) : (

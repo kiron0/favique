@@ -1,5 +1,6 @@
 "use client"
 
+import { Route } from "next"
 import Link from "next/link"
 
 import { Banner } from "@/components/banner"
@@ -53,7 +54,7 @@ export function Tutorials() {
               <ul className="list-disc pl-8">
                 {tutorial.items.map((item, j) => (
                   <li key={j} className="text-blue-400">
-                    <Link href={item.link}>{item.title}</Link>
+                    <Link href={item.link as Route}>{item.title}</Link>
                   </li>
                 ))}
               </ul>
