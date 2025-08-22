@@ -10,7 +10,7 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,css}\"",
     "upgrade": "bunx --bun ncu -u && bun install",
-    "push": "git add . && git commit -m \"chore update\" && git push"
+    "push": "git add . && git commit -m \"fix: chore update\" && git push"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
